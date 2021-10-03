@@ -16,6 +16,11 @@
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
+
+			modelBuilder.Entity<WeatherForecast>()
+				.Property(wf => wf.TemperatureF)
+				// here is the computed query definition
+				.HasComputedColumnSql("CAST((32 + ([TemperatureC] / 0.5556)) as INTEGER)");
 		}
 	}
 }
