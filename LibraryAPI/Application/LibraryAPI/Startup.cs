@@ -2,6 +2,7 @@ namespace LibraryAPI
 {
 	using LibraryAPI.Database;
 	using LibraryAPI.Services.Database;
+	using LibraryAPI.Services.Database.Interfaces;
 
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Hosting;
@@ -31,7 +32,7 @@ namespace LibraryAPI
 			services.AddDbContext<LibraryAPIDbContext>();
 
 			// Database services
-			services.AddScoped<BookService>();
+			services.AddScoped<IBookService, BookService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

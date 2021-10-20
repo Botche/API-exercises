@@ -1,12 +1,9 @@
 ﻿namespace LibraryAPI.Controllers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
 	using System.Threading.Tasks;
 
 	using LibraryAPI.Database.Models.Books;
-	using LibraryAPI.Services.Database;
+	using LibraryAPI.Services.Database.Interfaces;
 
 	using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +11,12 @@
 	[Route("api/[controller]")]
 	public class BookController : ControllerBase
 	{
-		public BookController(BookService bookService)
+		public BookController(IBookService bookService)
 		{
 			this.BookService = bookService;
 		}
 
-		public BookService BookService { get; }
+		public IBookService BookService { get; }
 
 		[HttpPost]
 		public async Task<IActionResult> Post(Book book)
