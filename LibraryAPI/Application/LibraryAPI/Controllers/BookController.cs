@@ -1,7 +1,10 @@
 ﻿namespace LibraryAPI.Controllers
 {
+	using System;
+	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
+	using LibraryAPI.BindingModels.Book;
 	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.Services.Database.Interfaces;
 
@@ -18,12 +21,33 @@
 
 		public IBookService BookService { get; }
 
-		[HttpPost]
-		public async Task<IActionResult> Post(Book book)
+		[HttpGet]
+		public async Task<IActionResult> Get()
 		{
-			Book createdBook = await this.BookService.AddAsync(book);
+			IEnumerable<GetAllBooksBindingModel> books = await this.BookService.GetAllAsync();
+
+			return this.Ok(books);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Post(PostBookBindingModel model)
+		{
+			Book createdBook = await this.BookService.AddAsync(model);
 		
-			return this.CreatedAtRoute(this.RouteData, book);
+			return this.CreatedAtRoute(this.RouteData, createdBook);
+		}
+
+		[HttpDelete]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			bool resultFromDelete = await this.BookService.DeleteAsync(id);
+
+			if (resultFromDelete == false)
+			{
+				return this.BadRequest("Something went wrong!");
+			}
+
+			return this.Ok(resultFromDelete);
 		}
 	}
 }

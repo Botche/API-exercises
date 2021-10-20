@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Database\LibraryAPI.Database\LibraryAPI.Database.csproj" />
+    <ProjectReference Include="..\LibraryAPI.BindingModels\LibraryAPI.BindingModels.csproj" />
   </ItemGroup>
 
 </Project>
