@@ -19,6 +19,7 @@
 				.ForMember(gabbm => gabbm.BooksCount, b => b.MapFrom(books => books.Count()));
 
 			this.CreateMap<PostBookBindingModel, Book>();
+			this.CreateMap<PutBookBindingModel, Book>();
 		}
 	}
 }

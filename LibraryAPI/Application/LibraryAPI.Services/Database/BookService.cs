@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Reflection;
 	using System.Threading.Tasks;
 
 	using AutoMapper;
@@ -56,9 +57,69 @@
 			return bookToReturn;
 		}
 
-		public Task<bool> UpdateAsync(Book book)
+		public async Task<bool> UpdateAsync(Guid id, PutBookBindingModel book)
 		{
-			throw new NotImplementedException();
+			Book bookToUpdate = await this.GetByIdAsync<Book>(id);
+
+			if (bookToUpdate == null)
+			{
+				return false;
+			}
+
+			Book updatedBook = this.Mapper.Map(book, bookToUpdate);
+			updatedBook.UpdatedOn = DateTime.UtcNow;
+
+			this.DbContext.Update(updatedBook);
+			await this.DbContext.SaveChangesAsync();
+
+			return true;
+		}
+
+		public async Task<bool> PartialUpdateAsync(Guid id, PatchBookBindingModel model)
+		{
+			Book bookToUpdate = await this.GetByIdAsync<Book>(id);
+
+			if (bookToUpdate == null)
+			{
+				return false;
+			}
+
+			Type modelType = model.GetType();
+			PropertyInfo[] properties = modelType.GetProperties();
+			foreach (PropertyInfo propertyInfo in properties)
+			{
+				var propertyValue = propertyInfo.GetValue(model);
+				if (propertyValue != null)
+				{
+					Type bookToUpdateType = bookToUpdate.GetType();
+					PropertyInfo propertyToUpdate = bookToUpdateType.GetProperty(propertyInfo.Name);
+					propertyToUpdate.SetValue(bookToUpdate, propertyValue);
+				}
+			}
+
+			bookToUpdate.UpdatedOn = DateTime.UtcNow;
+
+			this.DbContext.Update(bookToUpdate);
+			await this.DbContext.SaveChangesAsync();
+
+			return true;
+
+			// Functional version
+			//	model
+			//		.GetType()
+			//		.GetProperties()
+			//		.ToList()
+			//		.ForEach(propertyInfo =>
+			//		{
+			//			var propertyValue = propertyInfo.GetValue(model);
+			//			if (propertyValue != null)
+			//			{
+			//				bookToUpdate
+			//					.GetType()
+			//					.GetProperty(propertyInfo.Name)
+			//					.SetValue(bookToUpdate, propertyValue);
+			//			}
+			//		});
 		}
 
 		public async Task<bool> DeleteAsync(Guid id)

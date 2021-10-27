@@ -51,7 +51,31 @@
 			return this.CreatedAtRoute(this.RouteData, createdBook);
 		}
 
+		[HttpPut]
+		[Route("{id}")]
+		public async Task<IActionResult> Put(Guid id, PutBookBindingModel model)
+		{
+			bool resultFromUpdate = await this.BookService.UpdateAsync(id, model);
+
+			if (resultFromUpdate == false)
+			{
+				return this.BadRequest("Something went wrong!");
+			}
+
+			return this.Ok();
+		}
+
+		[HttpPatch]
+		[Route("{id}")]
+		public async Task<IActionResult> Patch(Guid id, PatchBookBindingModel model)
+		{
+			bool resultFromPartialUpdate = await this.BookService.PartialUpdateAsync(id, model);
+
+			return this.Ok();
+		}
+
 		[HttpDelete]
+		[Route("{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
 			bool resultFromDelete = await this.BookService.DeleteAsync(id);

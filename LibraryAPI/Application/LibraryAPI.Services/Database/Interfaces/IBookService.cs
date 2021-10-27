@@ -1,11 +1,9 @@
 ﻿namespace LibraryAPI.Services.Database.Interfaces
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
 	using LibraryAPI.BindingModels.Book;
-	using LibraryAPI.Database.Models.Books;
 
 	public interface IBookService
 	{
@@ -17,6 +15,8 @@
 
 		Task<bool> DeleteAsync(Guid id);
 
-		Task<bool> UpdateAsync(Book book);
+		Task<bool> UpdateAsync(Guid id, PutBookBindingModel book);
+
+		Task<bool> PartialUpdateAsync(Guid id, PatchBookBindingModel model);
 	}
 }
