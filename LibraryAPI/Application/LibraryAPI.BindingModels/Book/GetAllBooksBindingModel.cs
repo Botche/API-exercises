@@ -4,8 +4,8 @@
 
 	public class GetAllBooksBindingModel
 	{
-		public ICollection<GetBookBindingModel> Books { get; set; }
-
 		public int BooksCount { get; set; }
+
+		public ICollection<GetBookBindingModel> Books { get; set; }
 	}
 }
