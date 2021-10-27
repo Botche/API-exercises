@@ -22,9 +22,23 @@
 		public IBookService BookService { get; }
 
 		[HttpGet]
+		[Route("{id}")]
+		public async Task<IActionResult> Get(Guid id)
+		{
+			GetBookBindingModel book = await this.BookService.GetByIdAsync<GetBookBindingModel>(id);
+
+			if (book == null)
+			{
+				return this.NotFound();
+			}
+
+			return this.Ok(book);
+		}
+
+		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			IEnumerable<GetAllBooksBindingModel> books = await this.BookService.GetAllAsync();
+			GetAllBooksBindingModel books = await this.BookService.GetAllAsync<GetAllBooksBindingModel>();
 
 			return this.Ok(books);
 		}
@@ -32,7 +46,7 @@
 		[HttpPost]
 		public async Task<IActionResult> Post(PostBookBindingModel model)
 		{
-			Book createdBook = await this.BookService.AddAsync(model);
+			Book createdBook = await this.BookService.AddAsync<Book>(model);
 		
 			return this.CreatedAtRoute(this.RouteData, createdBook);
 		}

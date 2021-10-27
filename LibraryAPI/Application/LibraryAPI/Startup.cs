@@ -1,5 +1,7 @@
 namespace LibraryAPI
 {
+	using System.Reflection;
+
 	using LibraryAPI.Database;
 	using LibraryAPI.Services.Database;
 	using LibraryAPI.Services.Database.Interfaces;
@@ -30,6 +32,8 @@ namespace LibraryAPI
 			});
 
 			services.AddDbContext<LibraryAPIDbContext>();
+
+			services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 			// Database services
 			services.AddScoped<IBookService, BookService>();

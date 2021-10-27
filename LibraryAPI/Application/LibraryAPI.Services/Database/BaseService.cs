@@ -2,6 +2,8 @@
 {
 	using System.Threading.Tasks;
 
+	using AutoMapper;
+
 	using LibraryAPI.Database;
 	using LibraryAPI.Database.Models;
 
@@ -10,11 +12,14 @@
 	public abstract class BaseService<TEntity>
 		where TEntity : BaseModel
 	{
-		protected BaseService(LibraryAPIDbContext dbContext)
+		protected BaseService(LibraryAPIDbContext dbContext, IMapper mapper)
 		{
+			this.Mapper = mapper;
 			this.DbContext = dbContext;
 			this.DbSet = dbContext.Set<TEntity>();
 		}
+
+		protected IMapper Mapper { get; }
 
 		protected LibraryAPIDbContext DbContext { get; private set; }
 

@@ -9,11 +9,11 @@
 
 	public interface IBookService
 	{
-		Task<IEnumerable<GetAllBooksBindingModel>> GetAllAsync();
+		Task<T> GetAllAsync<T>();
 
-		Task<Book> GetByIdAsync(Guid id);
+		Task<T> GetByIdAsync<T>(Guid id);
 
-		Task<Book> AddAsync(PostBookBindingModel book);
+		Task<T> AddAsync<T>(PostBookBindingModel book);
 
 		Task<bool> DeleteAsync(Guid id);
 

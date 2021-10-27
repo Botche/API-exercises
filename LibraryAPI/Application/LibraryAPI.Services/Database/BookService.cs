@@ -5,6 +5,8 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 
+	using AutoMapper;
+
 	using LibraryAPI.BindingModels.Book;
 	using LibraryAPI.Database;
 	using LibraryAPI.Database.Models.Books;
@@ -14,49 +16,44 @@
 
 	public class BookService : BaseService<Book>, IBookService
 	{
-		public BookService(LibraryAPIDbContext dbContext)
-			: base(dbContext)
+		public BookService(LibraryAPIDbContext dbContext, IMapper mapper)
+			: base(dbContext, mapper)
 		{
 
 		}
-		public async Task<IEnumerable<GetAllBooksBindingModel>> GetAllAsync()
+
+		public async Task<T> GetAllAsync<T>()
 		{
-			List<GetAllBooksBindingModel> books = await this.DbSet
-				.Select(b => new GetAllBooksBindingModel
-				{
-					Id = b.Id,
-					Author = b.Author,
-					Name = b.Name,
-					CreatedOn = b.CreatedOn,
-					UpdatedOn = b.UpdatedOn,
-					DeletedOn = b.DeletedOn,
-					IsDeleted = b.IsDeleted,
-				})
+			List<Book> books = await this.DbSet
 				.OrderBy(b => b.Name)
 				.ThenBy(b => b.Author)
+			  .Include(b => b.Genres)
 				.ToListAsync();
 
-			return books;
+			T mappedBooks = this.Mapper.Map<T>(books);
+			return mappedBooks;
 		}
 
-		public async Task<Book> GetByIdAsync(Guid id)
+		public async Task<T> GetByIdAsync<T>(Guid id)
 		{
-			Book book = await this.DbSet.FindAsync(id);
+			Book book = await this.DbSet
+				.Include(b => b.Genres)
+				.SingleOrDefaultAsync(b => b.Id == id);
 
-			return book;
+			T mappedBook = this.Mapper.Map<T>(book);
+
+			return mappedBook;
 		}
 
-		public async Task<Book> AddAsync(PostBookBindingModel book)
+		public async Task<T> AddAsync<T>(PostBookBindingModel book)
 		{
-			// Add AutoMapper
-			Book bookToAdd = new Book();
-			bookToAdd.Name = book.Name;
-			bookToAdd.Author = book.Author;
+			Book bookToAdd = this.Mapper.Map<Book>(book);
 
 			await this.DbSet.AddAsync(bookToAdd);
 			await this.DbContext.SaveChangesAsync();
 
-			return bookToAdd;
+			T bookToReturn = this.Mapper.Map<T>(bookToAdd);
+			return bookToReturn;
 		}
 
 		public Task<bool> UpdateAsync(Book book)
@@ -66,7 +63,7 @@
 
 		public async Task<bool> DeleteAsync(Guid id)
 		{
-			Book bookToDelete = await this.GetByIdAsync(id);
+			Book bookToDelete = await this.GetByIdAsync<Book>(id);
 
 			if (bookToDelete == null)
 			{
