@@ -2,14 +2,16 @@
 {
 	using System.ComponentModel.DataAnnotations;
 
+	using LibraryAPI.BindingModels.Constants;
+
 	public class PutBookBindingModel
 	{
 		[Required]
-		[StringLength(128)]
+		[StringLength(BookConstants.NAME_MAX_LENGTH)]
 		public string Name { get; set; }
 
 		[Required]
-		[StringLength(128)]
+		[StringLength(BookConstants.AUTHOR_MAX_LENGTH)]
 		public string Author { get; set; }
 	}
 }

@@ -13,10 +13,10 @@
 
 		Task<T> AddAsync<T>(PostBookBindingModel book);
 
-		Task<bool> DeleteAsync(Guid id);
-
 		Task<bool> UpdateAsync(Guid id, PutBookBindingModel book);
 
 		Task<bool> PartialUpdateAsync(Guid id, PatchBookBindingModel model);
+
+		Task<bool> DeleteAsync(Guid id);
 	}
 }

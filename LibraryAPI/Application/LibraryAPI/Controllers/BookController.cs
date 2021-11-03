@@ -4,14 +4,15 @@
 	using System.Threading.Tasks;
 
 	using LibraryAPI.BindingModels.Book;
+	using LibraryAPI.Constants;
 	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.Services.Database.Interfaces;
 
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Mvc;
 
-	[Produces("application/json")]
 	[ApiController]
+	[Produces("application/json")]
 	[Route("api/[controller]")]
 	public class BookController : ControllerBase
 	{
@@ -109,7 +110,7 @@
 
 			if (resultFromUpdate == false)
 			{
-				return this.BadRequest("Something went wrong!");
+				return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE);
 			}
 
 			return this.Ok(resultFromUpdate);
@@ -139,6 +140,11 @@
 		{
 			bool resultFromPartialUpdate = await this.BookService.PartialUpdateAsync(id, model);
 
+			if (resultFromPartialUpdate == false)
+			{
+				return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE);
+			}
+
 			return this.Ok();
 		}
 
@@ -157,7 +163,7 @@
 
 			if (resultFromDelete == false)
 			{
-				return this.BadRequest("Something went wrong!");
+				return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE");
 			}
 
 			return this.Ok(resultFromDelete);

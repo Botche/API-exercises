@@ -28,6 +28,8 @@ namespace LibraryAPI
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers();
+
+			// Swagger
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "LibraryAPI", Version = "v1" });
@@ -38,12 +40,14 @@ namespace LibraryAPI
 				c.IncludeXmlComments(xmlPath);
 			});
 
+			// Database
 			services.AddDbContext<LibraryAPIDbContext>();
 
+			// AutoMapper
 			services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 			// Database services
-			services.AddScoped<IBookService, BookService>();
+			this.AddDatabaseServices(services);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +70,12 @@ namespace LibraryAPI
 			{
 				endpoints.MapControllers();
 			});
+		}
+
+		private void AddDatabaseServices(IServiceCollection services)
+		{
+			services.AddScoped<IBookService, BookService>();
+			services.AddScoped<IGenreService, GenreService>();
 		}
 	}
 }
