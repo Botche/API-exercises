@@ -5,11 +5,14 @@ namespace LibraryAPI
 	using System.Reflection;
 
 	using LibraryAPI.Database;
+	using LibraryAPI.Infrastructure.Extensions;
+	using LibraryAPI.Infrastructure.Middlewares;
 	using LibraryAPI.Services.Database;
 	using LibraryAPI.Services.Database.Interfaces;
 
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Hosting;
+	using Microsoft.AspNetCore.Mvc.Infrastructure;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 	using Microsoft.Extensions.Hosting;
@@ -48,6 +51,8 @@ namespace LibraryAPI
 
 			// Database services
 			this.AddDatabaseServices(services);
+
+			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +64,8 @@ namespace LibraryAPI
 				app.UseSwagger();
 				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryAPI v1"));
 			}
+			
+			app.ConfigureCustomExceptionMiddleware();
 
 			app.UseHttpsRedirection();
 

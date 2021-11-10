@@ -13,19 +13,23 @@
 	using LibraryAPI.DTOs.Book;
 	using LibraryAPI.Services.Database.Interfaces;
 
+	using Microsoft.AspNetCore.Mvc.Infrastructure;
 	using Microsoft.EntityFrameworkCore;
 
 	public class BookService : BaseService<Book>, IBookService
 	{
+		private readonly IActionContextAccessor actionContextAccessor;
 		private readonly IGenreService genreService;
 		private readonly IBookGenreMappingService bookGenreMappingService;
 
 		public BookService(LibraryAPIDbContext dbContext, 
 			IMapper mapper,
+			IActionContextAccessor actionContextAccessor,
 			IGenreService genreService,
 			IBookGenreMappingService bookGenreMappingService)
 			: base(dbContext, mapper)
 		{
+			this.actionContextAccessor = actionContextAccessor;
 			this.genreService = genreService;
 			this.bookGenreMappingService = bookGenreMappingService;
 		}
@@ -164,7 +168,7 @@
 				Genre genre = await genreService.GetByIdAsync<Genre>(genreId);
 				if (genre == null)
 				{
-					// TODO: throw an error, genre doesn't exist
+					this.actionContextAccessor.ActionContext.ModelState.AddModelError("GenreId", $"Genre with such an id does not exist! ({genreId})");
 					continue;
 				}
 
@@ -173,7 +177,7 @@
 							&& bgm.GenreId == genre.Id);
 				if (isGenreAlreadyAssigned)
 				{
-					// TODO: throw an error, already added genre
+					this.actionContextAccessor.ActionContext.ModelState.AddModelError("Genre", $"Genre is already added to the book! ({genreId})");
 					continue;
 				}
 

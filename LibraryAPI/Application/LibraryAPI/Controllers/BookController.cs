@@ -10,6 +10,10 @@
 
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Mvc;
+	using System.Linq;
+	using System.Collections.Generic;
+	using Microsoft.AspNetCore.Mvc.ModelBinding;
+	using LibraryAPI.Common.Exceptions;
 
 	public class BookController : BaseAPIController
 	{
@@ -139,6 +143,12 @@
 		public async Task<IActionResult> Patch(Guid id, PatchBookDTO model)
 		{
 			bool resultFromPartialUpdate = await this.BookService.PartialUpdateAsync(id, model);
+
+			if (this.ModelState.IsValid == false)
+			{
+				IEnumerable<ModelError> errors = this.ModelState.Values.SelectMany(v => v.Errors);
+				throw new BulkEditModelException(errors);
+			}
 
 			if (resultFromPartialUpdate == false)
 			{
