@@ -76,6 +76,7 @@ namespace LibraryAPI
 		{
 			services.AddScoped<IBookService, BookService>();
 			services.AddScoped<IGenreService, GenreService>();
+			services.AddScoped<IBookGenreMappingService, BookGenreMappingService>();
 		}
 	}
 }

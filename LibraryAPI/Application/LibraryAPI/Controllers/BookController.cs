@@ -122,7 +122,10 @@
 		///     PATCH /api/Book
 		///     {
 		///        "name": "BookName",
-		///        "author": "Author"
+		///        "author": "Author",
+		///        "genresId" [
+		///          "GenreId"
+		///        ]
 		///     }
 		///
 		/// </remarks>

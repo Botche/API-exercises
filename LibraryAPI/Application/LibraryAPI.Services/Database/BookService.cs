@@ -17,10 +17,17 @@
 
 	public class BookService : BaseService<Book>, IBookService
 	{
-		public BookService(LibraryAPIDbContext dbContext, IMapper mapper)
+		private readonly IGenreService genreService;
+		private readonly IBookGenreMappingService bookGenreMappingService;
+
+		public BookService(LibraryAPIDbContext dbContext, 
+			IMapper mapper,
+			IGenreService genreService,
+			IBookGenreMappingService bookGenreMappingService)
 			: base(dbContext, mapper)
 		{
-
+			this.genreService = genreService;
+			this.bookGenreMappingService = bookGenreMappingService;
 		}
 
 		public async Task<T> GetAllAsync<T>()
@@ -91,6 +98,18 @@
 				var propertyValue = propertyInfo.GetValue(model);
 				if (propertyValue != null)
 				{
+					Type propertyType = propertyInfo.PropertyType;
+					bool isPropertyTypeIEnumerable = propertyType.IsGenericType 
+						&& propertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>);
+
+					if (isPropertyTypeIEnumerable)
+					{
+						IEnumerable<Guid> genresId = propertyInfo.GetValue(model) as IEnumerable<Guid>;
+						await this.SaveGenresToBook(genresId, bookToUpdate);
+
+						continue;
+					}
+
 					Type bookToUpdateType = bookToUpdate.GetType();
 					PropertyInfo propertyToUpdate = bookToUpdateType.GetProperty(propertyInfo.Name);
 					propertyToUpdate.SetValue(bookToUpdate, propertyValue);
@@ -136,6 +155,36 @@
 
 			bool result = resultFromDb != 0;
 			return result;
+		}
+
+		private async Task SaveGenresToBook(IEnumerable<Guid> genresId, Book book)
+		{
+			foreach (Guid genreId in genresId)
+			{
+				Genre genre = await genreService.GetByIdAsync<Genre>(genreId);
+				if (genre == null)
+				{
+					// TODO: throw an error, genre doesn't exist
+					continue;
+				}
+
+				bool isGenreAlreadyAssigned = book.Genres
+					.Any(bgm => bgm.BookId == book.Id 
+							&& bgm.GenreId == genre.Id);
+				if (isGenreAlreadyAssigned)
+				{
+					// TODO: throw an error, already added genre
+					continue;
+				}
+
+				BookGenreMapping bookGenreMapping = new BookGenreMapping
+				{
+					BookId = book.Id,
+					GenreId = genre.Id
+				};
+
+				await this.bookGenreMappingService.AddAsync<BookGenreMapping>(bookGenreMapping);
+			}
 		}
 	}
 }
