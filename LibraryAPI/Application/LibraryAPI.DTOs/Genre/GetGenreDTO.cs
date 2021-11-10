@@ -1,8 +1,8 @@
-﻿namespace LibraryAPI.BindingModels.Genre
+﻿namespace LibraryAPI.DTOs.Genre
 {
 	using System;
 
-	public class GetGenreBindingModel
+	public class GetGenreDTO
 	{
 		public Guid Id { get; set; }
 

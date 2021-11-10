@@ -8,9 +8,9 @@
 
 	using AutoMapper;
 
-	using LibraryAPI.BindingModels.Book;
 	using LibraryAPI.Database;
 	using LibraryAPI.Database.Models.Books;
+	using LibraryAPI.DTOs.Book;
 	using LibraryAPI.Services.Database.Interfaces;
 
 	using Microsoft.EntityFrameworkCore;
@@ -46,7 +46,7 @@
 			return mappedBook;
 		}
 
-		public async Task<T> AddAsync<T>(PostBookBindingModel book)
+		public async Task<T> AddAsync<T>(PostBookDTO book)
 		{
 			Book bookToAdd = this.Mapper.Map<Book>(book);
 
@@ -57,7 +57,7 @@
 			return bookToReturn;
 		}
 
-		public async Task<bool> UpdateAsync(Guid id, PutBookBindingModel book)
+		public async Task<bool> UpdateAsync(Guid id, PutBookDTO book)
 		{
 			Book bookToUpdate = await this.GetByIdAsync<Book>(id);
 
@@ -75,7 +75,7 @@
 			return true;
 		}
 
-		public async Task<bool> PartialUpdateAsync(Guid id, PatchBookBindingModel model)
+		public async Task<bool> PartialUpdateAsync(Guid id, PatchBookDTO model)
 		{
 			Book bookToUpdate = await this.GetByIdAsync<Book>(id);
 

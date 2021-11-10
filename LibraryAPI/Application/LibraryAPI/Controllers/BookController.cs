@@ -3,7 +3,7 @@
 	using System;
 	using System.Threading.Tasks;
 
-	using LibraryAPI.BindingModels.Book;
+	using LibraryAPI.DTOs.Book;
 	using LibraryAPI.Constants;
 	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.Services.Database.Interfaces;
@@ -11,10 +11,7 @@
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Mvc;
 
-	[ApiController]
-	[Produces("application/json")]
-	[Route("api/[controller]")]
-	public class BookController : ControllerBase
+	public class BookController : BaseAPIController
 	{
 		public BookController(IBookService bookService)
 		{
@@ -36,7 +33,7 @@
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			GetBookBindingModel book = await this.BookService.GetByIdAsync<GetBookBindingModel>(id);
+			GetBookDTO book = await this.BookService.GetByIdAsync<GetBookDTO>(id);
 
 			if (book == null)
 			{
@@ -54,7 +51,7 @@
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			GetAllBooksBindingModel books = await this.BookService.GetAllAsync<GetAllBooksBindingModel>();
+			GetAllBooksDTO books = await this.BookService.GetAllAsync<GetAllBooksDTO>();
 
 			return this.Ok(books);
 		}
@@ -77,7 +74,7 @@
 		/// <response code="200">If the book is created successfully</response>
 		/// <response code="400">If the body is not correct</response>
 		[HttpPost]
-		public async Task<IActionResult> Post(PostBookBindingModel model)
+		public async Task<IActionResult> Post(PostBookDTO model)
 		{
 			Book createdBook = await this.BookService.AddAsync<Book>(model);
 		
@@ -104,7 +101,7 @@
 		/// <response code="400">If the body is not correct</response>
 		[HttpPut]
 		[Route("{id}")]
-		public async Task<IActionResult> Put(Guid id, PutBookBindingModel model)
+		public async Task<IActionResult> Put(Guid id, PutBookDTO model)
 		{
 			bool resultFromUpdate = await this.BookService.UpdateAsync(id, model);
 
@@ -136,7 +133,7 @@
 		/// <response code="400">If the body is not correct</response>
 		[HttpPatch]
 		[Route("{id}")]
-		public async Task<IActionResult> Patch(Guid id, PatchBookBindingModel model)
+		public async Task<IActionResult> Patch(Guid id, PatchBookDTO model)
 		{
 			bool resultFromPartialUpdate = await this.BookService.PartialUpdateAsync(id, model);
 
@@ -163,7 +160,7 @@
 
 			if (resultFromDelete == false)
 			{
-				return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE");
+				return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE);
 			}
 
 			return this.Ok(resultFromDelete);

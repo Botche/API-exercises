@@ -1,4 +1,4 @@
-﻿namespace LibraryAPI.BindingModels.Constants
+﻿namespace LibraryAPI.DTOs.Constants
 {
 	public static class BookConstants
 	{

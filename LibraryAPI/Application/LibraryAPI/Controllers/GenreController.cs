@@ -3,16 +3,13 @@
 	using System;
 	using System.Threading.Tasks;
 
-	using LibraryAPI.BindingModels.Genre;
+	using LibraryAPI.DTOs.Genre;
 	using LibraryAPI.Constants;
 	using LibraryAPI.Services.Database.Interfaces;
 
 	using Microsoft.AspNetCore.Mvc;
 
-	[ApiController]
-	[Produces("application/json")]
-	[Route("[controller]")]
-	public class GenreController : ControllerBase
+	public class GenreController : BaseAPIController
 	{
 		public GenreController(IGenreService genreService)
 		{
@@ -24,7 +21,7 @@
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			GetAllGenreBindingModel genres = await this.GenreService.GetAllAsync<GetAllGenreBindingModel>();
+			GetAllGenreDTO genres = await this.GenreService.GetAllAsync<GetAllGenreDTO>();
 
 			return this.Ok(genres);
 		}
@@ -33,7 +30,7 @@
 		[Route("{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			GetGenreBindingModel genre = await this.GenreService.GetByIdAsync<GetGenreBindingModel>(id);
+			GetGenreDTO genre = await this.GenreService.GetByIdAsync<GetGenreDTO>(id);
 
 			if (genre == null)
 			{
@@ -45,16 +42,16 @@
 
 
 		[HttpPost]
-		public async Task<IActionResult> Post(PostGenreBindingModel model)
+		public async Task<IActionResult> Post(PostGenreDTO model)
 		{
-			GetGenreBindingModel createdGenre = await this.GenreService.AddAsync<GetGenreBindingModel>(model);
+			GetGenreDTO createdGenre = await this.GenreService.AddAsync<GetGenreDTO>(model);
 
 			return this.CreatedAtRoute(this.RouteData, createdGenre);
 		}
 
 		[HttpPut]
 		[Route("{id}")]
-		public async Task<IActionResult> Put(Guid id, PutGenreBindingModel model)
+		public async Task<IActionResult> Put(Guid id, PutGenreDTO model)
 		{
 			bool resultFromUpdate = await this.GenreService.UpdateAsync(id, model);
 

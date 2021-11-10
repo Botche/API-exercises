@@ -1,10 +1,10 @@
-﻿namespace LibraryAPI.BindingModels.Genre
+﻿namespace LibraryAPI.DTOs.Genre
 {
 	using System.ComponentModel.DataAnnotations;
 
-	using LibraryAPI.BindingModels.Constants;
+	using LibraryAPI.DTOs.Constants;
 
-	public class PostGenreBindingModel
+	public class PutGenreDTO
 	{
 		[Required]
 		[StringLength(GenreConstants.NAME_MAX_LENGTH)]

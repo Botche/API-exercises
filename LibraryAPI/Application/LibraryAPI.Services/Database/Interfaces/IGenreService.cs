@@ -3,7 +3,7 @@
 	using System;
 	using System.Threading.Tasks;
 
-	using LibraryAPI.BindingModels.Genre;
+	using LibraryAPI.DTOs.Genre;
 
 	public interface IGenreService
 	{
@@ -11,9 +11,9 @@
 
 		Task<T> GetByIdAsync<T>(Guid id);
 
-		Task<T> AddAsync<T>(PostGenreBindingModel model);
+		Task<T> AddAsync<T>(PostGenreDTO model);
 
-		Task<bool> UpdateAsync(Guid id, PutGenreBindingModel model);
+		Task<bool> UpdateAsync(Guid id, PutGenreDTO model);
 
 		Task<bool> DeleteAsync(Guid id);
 	}

@@ -1,8 +1,8 @@
-﻿namespace LibraryAPI.BindingModels.Book
+﻿namespace LibraryAPI.DTOs.Book
 {
 	using System;
 
-	public class GetBookBindingModel
+	public class GetBookDTO
 	{
 		public Guid Id { get; set; }
 

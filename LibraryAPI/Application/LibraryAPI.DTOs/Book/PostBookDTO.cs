@@ -1,10 +1,10 @@
-﻿namespace LibraryAPI.BindingModels.Book
+﻿namespace LibraryAPI.DTOs.Book
 {
 	using System.ComponentModel.DataAnnotations;
 
-	using LibraryAPI.BindingModels.Constants;
+	using LibraryAPI.DTOs.Constants;
 
-	public class PutBookBindingModel
+	public class PostBookDTO
 	{
 		[Required]
 		[StringLength(BookConstants.NAME_MAX_LENGTH)]

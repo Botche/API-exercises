@@ -7,7 +7,7 @@
 
 	using AutoMapper;
 
-	using LibraryAPI.BindingModels.Genre;
+	using LibraryAPI.DTOs.Genre;
 	using LibraryAPI.Database;
 	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.Services.Database.Interfaces;
@@ -41,7 +41,7 @@
 			return result;
 		}
 
-		public async Task<T> AddAsync<T>(PostGenreBindingModel model)
+		public async Task<T> AddAsync<T>(PostGenreDTO model)
 		{
 			Genre genreToAdd = this.Mapper.Map<Genre>(model);
 
@@ -52,7 +52,7 @@
 			return result;
 		}
 
-		public async Task<bool> UpdateAsync(Guid id, PutGenreBindingModel model)
+		public async Task<bool> UpdateAsync(Guid id, PutGenreDTO model)
 		{
 			Genre genreToUpdate = await this.DbSet
 				.FindAsync(id);
