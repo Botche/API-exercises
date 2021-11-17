@@ -19,18 +19,18 @@
 		public IGenreService GenreService { get; }
 
 		[HttpGet]
-		public async Task<IActionResult> Get()
+		public async Task<IActionResult> Get(bool withDeleted = false)
 		{
-			GetAllGenreDTO genres = await this.GenreService.GetAllAsync<GetAllGenreDTO>();
+			GetAllGenreDTO genres = await this.GenreService.GetAllAsync<GetAllGenreDTO>(withDeleted);
 
 			return this.Ok(genres);
 		}
 
 		[HttpGet]
 		[Route("{id}")]
-		public async Task<IActionResult> Get(Guid id)
+		public async Task<IActionResult> Get(Guid id, bool withDeleted = false)
 		{
-			GetGenreDTO genre = await this.GenreService.GetByIdAsync<GetGenreDTO>(id);
+			GetGenreDTO genre = await this.GenreService.GetByIdAsync<GetGenreDTO>(id, withDeleted);
 
 			if (genre == null)
 			{
@@ -51,9 +51,9 @@
 
 		[HttpPut]
 		[Route("{id}")]
-		public async Task<IActionResult> Put(Guid id, PutGenreDTO model)
+		public async Task<IActionResult> Put(Guid id, PutGenreDTO model, bool withDeleted = false)
 		{
-			bool resultFromUpdate = await this.GenreService.UpdateAsync(id, model);
+			bool resultFromUpdate = await this.GenreService.UpdateAsync(id, model, withDeleted);
 
 			if (resultFromUpdate == false)
 			{

@@ -34,31 +34,44 @@
 			this.bookGenreMappingService = bookGenreMappingService;
 		}
 
-		public async Task<T> GetAllAsync<T>()
+		public async Task<T> GetAllAsync<T>(bool withDeleted = false)
 		{
-			List<Book> books = await this.DbSet
+			IQueryable<Book> booksQuery = this.DbSet
 				.OrderBy(b => b.Name)
 				.ThenBy(b => b.Author)
 			  .Include(b => b.Genres)
-				.ToListAsync();
+				.AsQueryable();
 
+			if (withDeleted == false)
+			{
+				// TODO: filter genres by withDeleted
+				booksQuery = booksQuery
+					.Where(b => b.IsDeleted == false);
+			}
+
+			List<Book> books = await booksQuery.ToListAsync();
 			T mappedBooks = this.Mapper.Map<T>(books);
 			return mappedBooks;
 		}
 
-		public async Task<T> GetByIdAsync<T>(Guid id)
+		public async Task<T> GetByIdAsync<T>(Guid id, bool withDeleted = false)
 		{
-			Book book = await this.DbSet
+			IQueryable<Book> bookQuery = this.DbSet
 				.Include(b => b.Genres)
-				.SingleOrDefaultAsync(b => b.Id == id);
+				.AsQueryable();
 
+			if (withDeleted == false)
+			{
+				bookQuery = bookQuery.Where(b => b.IsDeleted == false);
+			}
+
+			Book book = await bookQuery.SingleOrDefaultAsync(b => b.Id == id);
 			if (book == null)
 			{
 				throw new BookDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			T mappedBook = this.Mapper.Map<T>(book);
-
 			return mappedBook;
 		}
 
@@ -73,9 +86,9 @@
 			return bookToReturn;
 		}
 
-		public async Task<bool> UpdateAsync(Guid id, PutBookDTO book)
+		public async Task<bool> UpdateAsync(Guid id, PutBookDTO book, bool withDeleted = false)
 		{
-			Book bookToUpdate = await this.GetByIdAsync<Book>(id);
+			Book bookToUpdate = await this.GetByIdAsync<Book>(id, withDeleted);
 
 			if (bookToUpdate == null)
 			{
@@ -91,9 +104,9 @@
 			return true;
 		}
 
-		public async Task<bool> PartialUpdateAsync(Guid id, PatchBookDTO model)
+		public async Task<bool> PartialUpdateAsync(Guid id, PatchBookDTO model, bool withDeleted = false)
 		{
-			Book bookToUpdate = await this.GetByIdAsync<Book>(id);
+			Book bookToUpdate = await this.GetByIdAsync<Book>(id, withDeleted);
 
 			if (bookToUpdate == null)
 			{
@@ -159,7 +172,10 @@
 				throw new BookDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
-			this.DbSet.Remove(bookToDelete);
+			bookToDelete.IsDeleted = true;
+			bookToDelete.DeletedOn = DateTime.UtcNow;
+
+			this.DbSet.Update(bookToDelete);
 			int resultFromDb = await this.DbContext.SaveChangesAsync();
 
 			bool result = resultFromDb != 0;

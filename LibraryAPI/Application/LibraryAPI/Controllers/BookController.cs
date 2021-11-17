@@ -28,6 +28,7 @@
 		/// Get book by Id
 		/// </summary>
 		/// <param name="id">The book id</param>
+		/// <param name="withDeleted"></param>
 		/// <returns>Returns the book entity by the given id</returns>
 		/// <response code="200">Returns the book entity by the given id</response>
 		/// <response code="404">If the book is null</response>
@@ -35,9 +36,9 @@
 		[Route("{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> Get(Guid id)
+		public async Task<IActionResult> Get(Guid id, bool withDeleted = false)
 		{
-			GetBookDTO book = await this.BookService.GetByIdAsync<GetBookDTO>(id);
+			GetBookDTO book = await this.BookService.GetByIdAsync<GetBookDTO>(id, withDeleted);
 
 			if (book == null)
 			{
@@ -53,9 +54,9 @@
 		/// <returns>Returns all books sorted by name</returns>
 		/// <response code="200">Returns all books sorted by name</response>
 		[HttpGet]
-		public async Task<IActionResult> Get()
+		public async Task<IActionResult> Get(bool withDeleted = false)
 		{
-			GetAllBooksDTO books = await this.BookService.GetAllAsync<GetAllBooksDTO>();
+			GetAllBooksDTO books = await this.BookService.GetAllAsync<GetAllBooksDTO>(withDeleted);
 
 			return this.Ok(books);
 		}
@@ -81,7 +82,7 @@
 		public async Task<IActionResult> Post(PostBookDTO model)
 		{
 			Book createdBook = await this.BookService.AddAsync<Book>(model);
-		
+
 			return this.CreatedAtRoute(this.RouteData, createdBook);
 		}
 
@@ -100,14 +101,15 @@
 		/// </remarks>
 		/// <param name="id">The book id</param>
 		/// <param name="model">Body model with data to update</param>
+		/// <param name="withDeleted"></param>
 		/// <returns>The result from the update action</returns>
 		/// <response code="200">If the book is updated successfully</response>
 		/// <response code="400">If the body is not correct</response>
 		[HttpPut]
 		[Route("{id}")]
-		public async Task<IActionResult> Put(Guid id, PutBookDTO model)
+		public async Task<IActionResult> Put(Guid id, PutBookDTO model, bool withDeleted = false)
 		{
-			bool resultFromUpdate = await this.BookService.UpdateAsync(id, model);
+			bool resultFromUpdate = await this.BookService.UpdateAsync(id, model, withDeleted);
 
 			if (resultFromUpdate == false)
 			{
@@ -135,14 +137,15 @@
 		/// </remarks>
 		/// <param name="id">The book id</param>
 		/// <param name="model">Body model with data to partial update</param>
+		/// <param name="withDeleted"></param>
 		/// <returns>The result from the update action</returns>
 		/// <response code="200">If the book is updated successfully</response>
 		/// <response code="400">If the body is not correct</response>
 		[HttpPatch]
 		[Route("{id}")]
-		public async Task<IActionResult> Patch(Guid id, PatchBookDTO model)
+		public async Task<IActionResult> Patch(Guid id, PatchBookDTO model, bool withDeleted = false)
 		{
-			bool resultFromPartialUpdate = await this.BookService.PartialUpdateAsync(id, model);
+			bool resultFromPartialUpdate = await this.BookService.PartialUpdateAsync(id, model, withDeleted);
 
 			if (this.ModelState.IsValid == false)
 			{

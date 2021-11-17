@@ -24,21 +24,32 @@
 
 		}
 
-		public async Task<T> GetAllAsync<T>()
+		public async Task<T> GetAllAsync<T>(bool withDeleted = false)
 		{
-			IEnumerable<Genre> genres = await this.DbSet
+			IQueryable<Genre> genresQuery = this.DbSet
 				.OrderBy(g => g.Name)
-				.ToListAsync();
+				.AsQueryable();
 
+			if (withDeleted == false)
+			{
+				genresQuery = genresQuery.Where(g => g.IsDeleted == false);
+			}
+
+			IEnumerable<Genre> genres = await genresQuery.ToListAsync();
 			T result = this.Mapper.Map<T>(genres);
 			return result;
 		}
 
-		public async Task<T> GetByIdAsync<T>(Guid id)
+		public async Task<T> GetByIdAsync<T>(Guid id, bool withDeleted = false)
 		{
-			Genre genre = await this.DbSet
-				.SingleOrDefaultAsync(g => g.Id == id);
+			IQueryable<Genre> genreQuery = this.DbSet.AsQueryable();
 
+			if (withDeleted == false)
+			{
+				genreQuery = genreQuery.Where(g => g.IsDeleted == false);
+			}
+
+			Genre genre = await genreQuery.SingleOrDefaultAsync(g => g.Id == id);
 			if (genre == null)
 			{
 				throw new GenreDoesNotExist(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
@@ -59,10 +70,9 @@
 			return result;
 		}
 
-		public async Task<bool> UpdateAsync(Guid id, PutGenreDTO model)
+		public async Task<bool> UpdateAsync(Guid id, PutGenreDTO model, bool withDeleted = false)
 		{
-			Genre genreToUpdate = await this.DbSet
-				.FindAsync(id);
+			Genre genreToUpdate = await this.GetByIdAsync<Genre>(id, withDeleted);
 
 			if (genreToUpdate == null)
 			{
@@ -80,8 +90,7 @@
 
 		public async Task<bool> DeleteAsync(Guid id)
 		{
-			Genre genreToDelete = await this.DbSet
-				.FindAsync(id);
+			Genre genreToDelete = await this.GetByIdAsync<Genre>(id);
 
 			if (genreToDelete == null)
 			{
