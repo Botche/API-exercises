@@ -4,10 +4,10 @@
 	using System.Threading.Tasks;
 
 	using LibraryAPI.DTOs.Genre;
-	using LibraryAPI.Constants;
 	using LibraryAPI.Services.Database.Interfaces;
 
 	using Microsoft.AspNetCore.Mvc;
+	using LibraryAPI.Common.Constants;
 
 	public class GenreController : BaseAPIController
 	{

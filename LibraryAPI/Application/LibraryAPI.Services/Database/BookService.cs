@@ -8,6 +8,8 @@
 
 	using AutoMapper;
 
+	using LibraryAPI.Common.Constants;
+	using LibraryAPI.Common.Exceptions;
 	using LibraryAPI.Database;
 	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.DTOs.Book;
@@ -18,7 +20,6 @@
 
 	public class BookService : BaseService<Book>, IBookService
 	{
-		private readonly IActionContextAccessor actionContextAccessor;
 		private readonly IGenreService genreService;
 		private readonly IBookGenreMappingService bookGenreMappingService;
 
@@ -27,9 +28,8 @@
 			IActionContextAccessor actionContextAccessor,
 			IGenreService genreService,
 			IBookGenreMappingService bookGenreMappingService)
-			: base(dbContext, mapper)
+			: base(dbContext, mapper, actionContextAccessor)
 		{
-			this.actionContextAccessor = actionContextAccessor;
 			this.genreService = genreService;
 			this.bookGenreMappingService = bookGenreMappingService;
 		}
@@ -51,6 +51,11 @@
 			Book book = await this.DbSet
 				.Include(b => b.Genres)
 				.SingleOrDefaultAsync(b => b.Id == id);
+
+			if (book == null)
+			{
+				throw new BookDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
+			}
 
 			T mappedBook = this.Mapper.Map<T>(book);
 
@@ -74,7 +79,7 @@
 
 			if (bookToUpdate == null)
 			{
-				return false;
+				throw new BookDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			Book updatedBook = this.Mapper.Map(book, bookToUpdate);
@@ -92,7 +97,7 @@
 
 			if (bookToUpdate == null)
 			{
-				return false;
+				throw new BookDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			Type modelType = model.GetType();
@@ -151,7 +156,7 @@
 
 			if (bookToDelete == null)
 			{
-				return false;
+				throw new BookDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			this.DbSet.Remove(bookToDelete);
@@ -168,7 +173,7 @@
 				Genre genre = await genreService.GetByIdAsync<Genre>(genreId);
 				if (genre == null)
 				{
-					this.actionContextAccessor.ActionContext.ModelState.AddModelError("GenreId", $"Genre with such an id does not exist! ({genreId})");
+					this.AddModelError("GenreId", string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, genreId));
 					continue;
 				}
 
@@ -177,7 +182,7 @@
 							&& bgm.GenreId == genre.Id);
 				if (isGenreAlreadyAssigned)
 				{
-					this.actionContextAccessor.ActionContext.ModelState.AddModelError("Genre", $"Genre is already added to the book! ({genreId})");
+					this.AddModelError("GenreId", string.Format(ExceptionMessages.GENRE_ALREADY_ADDED_MESSAGE, genreId));
 					continue;
 				}
 

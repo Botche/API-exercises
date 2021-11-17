@@ -4,7 +4,6 @@
 	using System.Threading.Tasks;
 
 	using LibraryAPI.DTOs.Book;
-	using LibraryAPI.Constants;
 	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.Services.Database.Interfaces;
 
@@ -14,6 +13,7 @@
 	using System.Collections.Generic;
 	using Microsoft.AspNetCore.Mvc.ModelBinding;
 	using LibraryAPI.Common.Exceptions;
+	using LibraryAPI.Common.Constants;
 
 	public class BookController : BaseAPIController
 	{

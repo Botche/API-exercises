@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryAPI.Services", "Appl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryAPI.DTOs", "Application\LibraryAPI.DTOs\LibraryAPI.DTOs.csproj", "{C8DD566A-B459-4C4A-9C37-EA947BA805F6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{10CC0BBC-4D84-400B-8A0A-6B42130C8C16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryAPI.Common", "Common\LibraryAPI.Common\LibraryAPI.Common.csproj", "{57496306-A3C8-49A8-A136-CC3D8A3B62CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,10 @@ Global
 		{C8DD566A-B459-4C4A-9C37-EA947BA805F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8DD566A-B459-4C4A-9C37-EA947BA805F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8DD566A-B459-4C4A-9C37-EA947BA805F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57496306-A3C8-49A8-A136-CC3D8A3B62CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57496306-A3C8-49A8-A136-CC3D8A3B62CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57496306-A3C8-49A8-A136-CC3D8A3B62CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57496306-A3C8-49A8-A136-CC3D8A3B62CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +61,7 @@ Global
 		{ED6EC9FD-ED6F-4614-B231-2387952220AD} = {16BDF26A-DFB2-46CD-9B1D-3C031892AE5B}
 		{237F5B94-09DD-42D1-BB7A-C4B0F35AC096} = {F027D23C-5F38-43A3-ABA5-2AF707AB44E0}
 		{C8DD566A-B459-4C4A-9C37-EA947BA805F6} = {F027D23C-5F38-43A3-ABA5-2AF707AB44E0}
+		{57496306-A3C8-49A8-A136-CC3D8A3B62CB} = {10CC0BBC-4D84-400B-8A0A-6B42130C8C16}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {08C50E24-1798-4DF6-BC91-66A8BC930E19}

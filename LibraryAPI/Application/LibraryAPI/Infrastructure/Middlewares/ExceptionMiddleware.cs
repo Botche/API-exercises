@@ -6,55 +6,58 @@
 
 	using Microsoft.AspNetCore.Http;
 
-  using LibraryAPI.Common;
+	using LibraryAPI.Common;
 	using LibraryAPI.Common.Exceptions;
 	using System.Linq;
 
 	public class ExceptionMiddleware
 	{
-    private readonly RequestDelegate next;
+		private readonly RequestDelegate next;
 
-    public ExceptionMiddleware(RequestDelegate next)
-    {
-      this.next = next;
-    }
-    public async Task InvokeAsync(HttpContext httpContext)
-    {
-      try
-      {
-        await next(httpContext);
-      }
-      catch (Exception ex)
-      {
-        await HandleExceptionAsync(httpContext, ex);
-      }
-    }
-
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
-    {
-      context.Response.ContentType = "application/json";
-      context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-      ErrorDetails errorDetails = new ErrorDetails()
-      {
-        StatusCode = context.Response.StatusCode,
-      };
-
-      switch (exception)
+		public ExceptionMiddleware(RequestDelegate next)
+		{
+			this.next = next;
+		}
+		public async Task InvokeAsync(HttpContext httpContext)
+		{
+			try
 			{
-        case BulkEditModelException:
-					BulkEditModelException bulkEditModelException = exception as BulkEditModelException;
-          errorDetails.Message = bulkEditModelException.ErrorsMessage
-            .Select(e => e.ErrorMessage);
+				await next(httpContext);
+			}
+			catch (Exception ex)
+			{
+				await HandleExceptionAsync(httpContext, ex);
+			}
+		}
 
-          break;
-        default:
-          errorDetails.Message = exception.Message;
+		private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+		{
+			context.Response.ContentType = "application/json";
+			context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+			ErrorDetails errorDetails = new ErrorDetails
+			{
+				Message = exception.Message,
+			};
+
+			switch (exception)
+			{
+				case BulkEditModelException:
+					BulkEditModelException bulkEditModelException = exception as BulkEditModelException;
+					errorDetails.Message = bulkEditModelException.ErrorsMessage
+						.Select(e => e.ErrorMessage);
+
+					break;
+				case BookDoesNotExist:
+				case GenreDoesNotExist:
+					context.Response.StatusCode = (int)HttpStatusCode.NotFound;
 					break;
 			}
 
+			errorDetails.StatusCode = context.Response.StatusCode;
+
       string result = errorDetails.ToString();
-      await context.Response.WriteAsync(result);
-    }
-  }
+			await context.Response.WriteAsync(result);
+		}
+	}
 }

@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\LibraryAPI.Common\LibraryAPI.Common.csproj" />
     <ProjectReference Include="..\LibraryAPI.DTOs\LibraryAPI.DTOs.csproj" />
     <ProjectReference Include="..\LibraryAPI.Services\LibraryAPI.Services.csproj" />
   </ItemGroup>

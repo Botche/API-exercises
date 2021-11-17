@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\LibraryAPI.Common\LibraryAPI.Common.csproj" />
     <ProjectReference Include="..\..\Database\LibraryAPI.Database\LibraryAPI.Database.csproj" />
     <ProjectReference Include="..\LibraryAPI.DTOs\LibraryAPI.DTOs.csproj" />
   </ItemGroup>

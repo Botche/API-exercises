@@ -7,6 +7,8 @@
 
 	using AutoMapper;
 
+	using LibraryAPI.Common.Constants;
+	using LibraryAPI.Common.Exceptions;
 	using LibraryAPI.DTOs.Genre;
 	using LibraryAPI.Database;
 	using LibraryAPI.Database.Models.Books;
@@ -37,6 +39,11 @@
 			Genre genre = await this.DbSet
 				.SingleOrDefaultAsync(g => g.Id == id);
 
+			if (genre == null)
+			{
+				throw new GenreDoesNotExist(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
+			}
+
 			T result = this.Mapper.Map<T>(genre);
 			return result;
 		}
@@ -59,7 +66,7 @@
 
 			if (genreToUpdate == null)
 			{
-				return false;
+				throw new GenreDoesNotExist(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
 			}
 
 			Genre updatedGenre = this.Mapper.Map(model, genreToUpdate);
@@ -78,7 +85,7 @@
 
 			if (genreToDelete == null)
 			{
-				return false;
+				throw new GenreDoesNotExist(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
 			}
 
 			this.DbContext.Remove(genreToDelete);
