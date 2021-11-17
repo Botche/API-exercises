@@ -97,7 +97,12 @@
 				throw new GenreDoesNotExist(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
 			}
 
-			this.DbContext.Remove(genreToDelete);
+			genreToDelete.IsDeleted = true;
+			genreToDelete.DeletedOn = DateTime.UtcNow;
+
+			this.DbSet.Update(genreToDelete);
+
+			// TODO: delete book genre relations?
 			await this.DbContext.SaveChangesAsync();
 
 			return true;
