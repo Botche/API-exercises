@@ -14,6 +14,7 @@
 	using Microsoft.AspNetCore.Mvc.ModelBinding;
 	using LibraryAPI.Common.Exceptions;
 	using LibraryAPI.Common.Constants;
+	using LibraryAPI.Infrastructure.Filters;
 
 	public class BookController : BaseAPIController
 	{
@@ -79,6 +80,7 @@
 		/// <response code="200">If the book is created successfully</response>
 		/// <response code="400">If the body is not correct</response>
 		[HttpPost]
+		[JwtAuthorize(Roles = new[] { "Admin" })]
 		public async Task<IActionResult> Post(PostBookDTO model)
 		{
 			Book createdBook = await this.BookService.AddAsync<Book>(model);

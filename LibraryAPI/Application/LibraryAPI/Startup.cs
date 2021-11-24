@@ -4,6 +4,7 @@ namespace LibraryAPI
 	using System.IO;
 	using System.Reflection;
 
+	using LibraryAPI.Common;
 	using LibraryAPI.Database;
 	using LibraryAPI.Infrastructure.Extensions;
 	using LibraryAPI.Infrastructure.Middlewares;
@@ -43,6 +44,9 @@ namespace LibraryAPI
 				c.IncludeXmlComments(xmlPath);
 			});
 
+			// Configure strongly typed settings object
+			services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
+
 			// Database
 			services.AddDbContext<LibraryAPIDbContext>();
 
@@ -73,6 +77,8 @@ namespace LibraryAPI
 
 			app.UseAuthorization();
 
+			app.UseMiddleware<JwtMiddleware>();
+
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
@@ -84,6 +90,7 @@ namespace LibraryAPI
 			services.AddScoped<IBookService, BookService>();
 			services.AddScoped<IGenreService, GenreService>();
 			services.AddScoped<IBookGenreMappingService, BookGenreMappingService>();
+			services.AddScoped<IUserService, UserService>();
 		}
 	}
 }

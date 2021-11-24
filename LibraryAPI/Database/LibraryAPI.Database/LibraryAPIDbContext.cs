@@ -2,13 +2,22 @@
 {
 	using System.Reflection;
 
+	using LibraryAPI.Common;
 	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.Database.Models.Users;
 
 	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Options;
 
 	public class LibraryAPIDbContext : DbContext
 	{
+		private readonly ApplicationSettings options;
+
+		public LibraryAPIDbContext(IOptions<ApplicationSettings> options)
+		{
+			this.options = options.Value;
+		}
+
 		public DbSet<Book> Books { get; set; }
 
 		public DbSet<Genre> Genres { get; set; }
@@ -27,7 +36,7 @@
 		{
 			base.OnConfiguring(optionsBuilder);
 
-			optionsBuilder.UseSqlServer("Server=.;Database=LibraryAPI;Integrated Security = true;");
+			optionsBuilder.UseSqlServer(options.DbConnectionString);
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
