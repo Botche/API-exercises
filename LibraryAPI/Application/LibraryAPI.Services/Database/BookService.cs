@@ -44,9 +44,9 @@
 
 			if (withDeleted == false)
 			{
-				// TODO: filter genres by withDeleted
 				booksQuery = booksQuery
-					.Where(b => b.IsDeleted == false);
+					.Where(b => b.IsDeleted == false)
+					.Include(b => b.Genres.Where(bgm => bgm.Genre.IsDeleted == false));
 			}
 
 			List<Book> books = await booksQuery.ToListAsync();
