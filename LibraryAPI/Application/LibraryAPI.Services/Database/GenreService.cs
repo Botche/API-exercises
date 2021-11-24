@@ -102,7 +102,6 @@
 
 			this.DbSet.Update(genreToDelete);
 
-			// TODO: delete book genre relations?
 			await this.DbContext.SaveChangesAsync();
 
 			return true;

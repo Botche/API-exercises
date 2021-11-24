@@ -175,7 +175,6 @@
 			bookToDelete.IsDeleted = true;
 			bookToDelete.DeletedOn = DateTime.UtcNow;
 
-			// TODO: delete book genre relations?
 			this.DbSet.Update(bookToDelete);
 			int resultFromDb = await this.DbContext.SaveChangesAsync();
 

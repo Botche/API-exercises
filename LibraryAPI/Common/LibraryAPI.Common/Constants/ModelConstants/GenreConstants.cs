@@ -1,4 +1,4 @@
-﻿namespace LibraryAPI.DTOs.Constants
+﻿namespace LibraryAPI.Common.Constants.ModelConstants
 {
 	public static class GenreConstants
 	{

@@ -4,14 +4,16 @@ using LibraryAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LibraryAPI.Database.Migrations
 {
     [DbContext(typeof(LibraryAPIDbContext))]
-    partial class LibraryAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211124151146_Add_User_Roles_Table_And_Constraints_To_All_Entities")]
+    partial class Add_User_Roles_Table_And_Constraints_To_All_Entities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

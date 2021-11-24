@@ -10,6 +10,10 @@
 		public void Configure(EntityTypeBuilder<BookGenreMapping> builder)
 		{
 			builder
+				.HasIndex(nameof(BookGenreMapping.BookId), nameof(BookGenreMapping.GenreId))
+				.IsUnique(true);
+
+			builder
 				.HasOne(bgm => bgm.Book)
 				.WithMany(b => b.Genres)
 				.HasForeignKey(bgm => bgm.BookId);

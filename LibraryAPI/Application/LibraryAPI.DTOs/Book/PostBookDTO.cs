@@ -2,7 +2,7 @@
 {
 	using System.ComponentModel.DataAnnotations;
 
-	using LibraryAPI.DTOs.Constants;
+	using LibraryAPI.Common.Constants.ModelConstants;
 
 	public class PostBookDTO
 	{
