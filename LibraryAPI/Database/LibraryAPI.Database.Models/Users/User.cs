@@ -5,6 +5,7 @@
 	using System.ComponentModel.DataAnnotations;
 
 	using LibraryAPI.Common.Constants.ModelConstants;
+	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.Database.Models.Interfaces;
 
 	public class User : BaseModel, IDeletable
@@ -15,8 +16,8 @@
 			this.IsDeleted = false;
 			this.DeletedOn = null;
 
-			// TODO: create relation with books (many-to-many)
 			this.Roles = new HashSet<UserRoleMapping>();
+			this.Books = new HashSet<BookUserMapping>();
 		}
 
 		[Required]
@@ -42,5 +43,7 @@
 		public DateTime? DeletedOn { get; set; }
 
 		public virtual ICollection<UserRoleMapping> Roles { get; set; }
+
+		public virtual ICollection<BookUserMapping> Books { get; set; }
 	}
 }

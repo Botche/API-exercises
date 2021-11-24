@@ -21,6 +21,8 @@
 
 		public DbSet<UserRoleMapping> UsersRolesMapping { get; set; }
 
+		public DbSet<BookUserMapping> BooksUsersMapping { get; set; }
+
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			base.OnConfiguring(optionsBuilder);

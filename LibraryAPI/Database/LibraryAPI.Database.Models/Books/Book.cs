@@ -16,6 +16,7 @@
 			this.DeletedOn = null;
 
 			this.Genres = new HashSet<BookGenreMapping>();
+			this.Users = new HashSet<BookUserMapping>();
 		}
 
 		[Required]
@@ -31,5 +32,7 @@
 		public DateTime? DeletedOn { get; set; }
 
 		public virtual ICollection<BookGenreMapping> Genres { get; set; }
+
+		public virtual ICollection<BookUserMapping> Users { get; set; }
 	}
 }
