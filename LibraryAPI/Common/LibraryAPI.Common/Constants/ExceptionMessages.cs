@@ -11,5 +11,9 @@
 		public const string GENRE_DOES_NOT_EXIST_MESSAGE = "Genre with such an id does not exist! ({0})";
 
 		public const string GENRE_ALREADY_ADDED_MESSAGE = "Genre is already added to the book! ({0})";
+
+		public const string ROLE_DOES_NOT_EXIST_MESSAGE = "Role with such a name does not exist!";
+
+		public const string USER_UNAUTHORIZED_MESSAGE = "User is unathorized for this kind of action!";
 	}
 }

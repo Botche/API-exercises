@@ -11,8 +11,10 @@
 	using AutoMapper;
 
 	using LibraryAPI.Common;
+	using LibraryAPI.Common.Constants;
 	using LibraryAPI.Database;
 	using LibraryAPI.Database.Models.Users;
+	using LibraryAPI.DTOs.Role;
 	using LibraryAPI.DTOs.User;
 	using LibraryAPI.Services.Database.Interfaces;
 
@@ -24,11 +26,19 @@
 	public class UserService : BaseService<User>, IUserService
 	{
 		private readonly ApplicationSettings options;
+		private readonly IUserRoleMappingService userRoleMappingService;
+		private readonly IRoleService roleService;
 
-		public UserService(LibraryAPIDbContext dbContext, IMapper mapper, IOptions<ApplicationSettings> options) 
+		public UserService(LibraryAPIDbContext dbContext, 
+			IMapper mapper, 
+			IOptions<ApplicationSettings> options,
+			IUserRoleMappingService userRoleMappingService,
+			IRoleService roleService) 
 			: base(dbContext, mapper)
 		{
 			this.options = options.Value;
+			this.userRoleMappingService = userRoleMappingService;
+			this.roleService = roleService;
 		}
 
 		public async Task<T> GetUserByEmailAsync<T>(string email)
@@ -86,18 +96,20 @@
 
 			User userToBeCreated = this.Mapper.Map<User>(model);
 
-			// TODO: Add default role
 			userToBeCreated.Salt = this.GeneratePasswordSalt();
 			userToBeCreated.PasswordHash = this.HashPassword(model.Password, userToBeCreated.Salt);
 
 			await this.DbSet.AddAsync(userToBeCreated);
 			await this.DbContext.SaveChangesAsync();
 
+			GetRoleIdDTO role = await this.roleService.GetRoleByNameAsync<GetRoleIdDTO>(GlobalConstants.USER_ROLE_NAME);
+			await this.userRoleMappingService.AddRoleToUserAsync(role.Id, userToBeCreated.Id);
+
 			T userToReturn = this.Mapper.Map<T>(userToBeCreated);
 			return userToReturn;
 		}
 
-		private string GeneratePasswordSalt()
+		public string GeneratePasswordSalt()
 		{
 			byte[] saltArray = new byte[128 / 8];
 
@@ -111,7 +123,7 @@
 			return salt;
 		}
 
-		private string HashPassword(string password, string passwordSalt)
+		public string HashPassword(string password, string passwordSalt)
 		{
 			var salt = Encoding.ASCII.GetBytes(passwordSalt);
 

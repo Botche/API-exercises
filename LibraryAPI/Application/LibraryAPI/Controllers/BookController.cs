@@ -80,7 +80,7 @@
 		/// <response code="200">If the book is created successfully</response>
 		/// <response code="400">If the body is not correct</response>
 		[HttpPost]
-		[JwtAuthorize(Roles = new[] { "Admin" })]
+		[JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
 		public async Task<IActionResult> Post(PostBookDTO model)
 		{
 			Book createdBook = await this.BookService.AddAsync<Book>(model);

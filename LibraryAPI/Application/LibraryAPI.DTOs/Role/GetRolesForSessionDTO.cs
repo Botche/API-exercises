@@ -1,4 +1,4 @@
-﻿namespace LibraryAPI.DTOs.User
+﻿namespace LibraryAPI.DTOs.Role
 {
 	public class GetRolesForSessionDTO
 	{

@@ -14,5 +14,9 @@
 		Task<T> GetUserByIdAsync<T>(Guid id);
 
 		Task<T> GetUserByEmailAsync<T>(string email);
+
+		string GeneratePasswordSalt();
+
+		string HashPassword(string password, string passwordSalt);
 	}
 }

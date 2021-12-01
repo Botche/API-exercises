@@ -48,8 +48,7 @@
 						.Select(e => e.ErrorMessage);
 
 					break;
-				case BookDoesNotExist:
-				case GenreDoesNotExist:
+				case EntityDoesNotExist:
 					context.Response.StatusCode = (int)HttpStatusCode.NotFound;
 					break;
 			}

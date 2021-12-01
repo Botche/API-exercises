@@ -68,7 +68,7 @@
 			Book book = await bookQuery.SingleOrDefaultAsync(b => b.Id == id);
 			if (book == null)
 			{
-				throw new BookDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
+				throw new EntityDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			T mappedBook = this.Mapper.Map<T>(book);
@@ -92,7 +92,7 @@
 
 			if (bookToUpdate == null)
 			{
-				throw new BookDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
+				throw new EntityDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			Book updatedBook = this.Mapper.Map(book, bookToUpdate);
@@ -110,7 +110,7 @@
 
 			if (bookToUpdate == null)
 			{
-				throw new BookDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
+				throw new EntityDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			Type modelType = model.GetType();
@@ -169,7 +169,7 @@
 
 			if (bookToDelete == null)
 			{
-				throw new BookDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
+				throw new EntityDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			bookToDelete.IsDeleted = true;

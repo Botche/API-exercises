@@ -1,11 +1,8 @@
 ﻿namespace LibraryAPI.DTOs.User
 {
 	using System;
-	using System.Collections.Generic;
 
-	using LibraryAPI.DTOs.Role;
-
-	public class GetUserForSessionDTO
+	public class GetUserInformationDTO
 	{
 		public Guid Id { get; set; }
 
@@ -14,7 +11,5 @@
 		public string FirstName { get; set; }
 
 		public string LastName { get; set; }
-
-		public IEnumerable<GetRolesForSessionDTO> Roles { get; set; }
 	}
 }

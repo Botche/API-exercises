@@ -3,7 +3,7 @@
 	using System;
 	using System.Linq;
 
-	using LibraryAPI.Database.Models.Users;
+	using LibraryAPI.Common.Constants;
 	using LibraryAPI.DTOs.User;
 
 	using Microsoft.AspNetCore.Mvc.Filters;
@@ -37,7 +37,7 @@
 
 			if (isInRole == false)
 			{
-				throw new ArgumentException();
+				throw new ArgumentException(ExceptionMessages.USER_UNAUTHORIZED_MESSAGE);
 			}
 		}
 	}
