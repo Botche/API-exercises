@@ -15,5 +15,7 @@
 		public const string ROLE_DOES_NOT_EXIST_MESSAGE = "Role with such a name does not exist!";
 
 		public const string USER_UNAUTHORIZED_MESSAGE = "User is unathorized for this kind of action!";
+
+		public const string USER_UNAUTHENTICATED_MESSAGE = "Log in before continue!";
 	}
 }

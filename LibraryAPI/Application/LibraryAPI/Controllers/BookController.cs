@@ -16,6 +16,7 @@
 	using LibraryAPI.Common.Constants;
 	using LibraryAPI.Infrastructure.Filters;
 
+	[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
 	public class BookController : BaseAPIController
 	{
 		public BookController(IBookService bookService)
@@ -80,7 +81,6 @@
 		/// <response code="200">If the book is created successfully</response>
 		/// <response code="400">If the body is not correct</response>
 		[HttpPost]
-		[JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
 		public async Task<IActionResult> Post(PostBookDTO model)
 		{
 			Book createdBook = await this.BookService.AddAsync<Book>(model);

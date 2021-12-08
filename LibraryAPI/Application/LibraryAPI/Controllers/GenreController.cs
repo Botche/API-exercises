@@ -8,7 +8,9 @@
 
 	using Microsoft.AspNetCore.Mvc;
 	using LibraryAPI.Common.Constants;
+	using LibraryAPI.Infrastructure.Filters;
 
+	[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
 	public class GenreController : BaseAPIController
 	{
 		public GenreController(IGenreService genreService)

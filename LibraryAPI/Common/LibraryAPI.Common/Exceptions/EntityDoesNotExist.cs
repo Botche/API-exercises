@@ -2,7 +2,7 @@
 {
 	using System;
 
-	public class EntityDoesNotExist : Exception
+	public class EntityDoesNotExist : CustomException
 	{
 		public EntityDoesNotExist(string exceptionMessage)
 				: base(exceptionMessage)

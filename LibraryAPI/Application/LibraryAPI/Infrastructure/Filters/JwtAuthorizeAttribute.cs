@@ -4,6 +4,7 @@
 	using System.Linq;
 
 	using LibraryAPI.Common.Constants;
+	using LibraryAPI.Common.Exceptions;
 	using LibraryAPI.DTOs.User;
 
 	using Microsoft.AspNetCore.Mvc.Filters;
@@ -19,7 +20,7 @@
 
 			if (user == null)
 			{
-				throw new ArgumentException();
+				throw new ArgumentException(ExceptionMessages.USER_UNAUTHENTICATED_MESSAGE);
 			}
 
 			bool isInRole = true;
@@ -37,7 +38,7 @@
 
 			if (isInRole == false)
 			{
-				throw new ArgumentException(ExceptionMessages.USER_UNAUTHORIZED_MESSAGE);
+				throw new UnauthorizedAccessCustomException(ExceptionMessages.USER_UNAUTHORIZED_MESSAGE);
 			}
 		}
 	}

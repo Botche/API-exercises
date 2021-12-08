@@ -5,7 +5,7 @@
 
 	using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-	public class BulkEditModelException : Exception
+	public class BulkEditModelException : CustomException
 	{
 		public BulkEditModelException(IEnumerable<ModelError> errorsMessage)
 				: base(null)
