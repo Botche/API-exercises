@@ -13,6 +13,7 @@
 			this.CreateMap<PostUserLoginDTO, User>();
 			this.CreateMap<PostUserRegisterDTO, User>();
 			this.CreateMap<User, GetUserInformationDTO>();
+			this.CreateMap<User, GetUserIdDTO>();
 			this.CreateMap<User, GetUserForSessionDTO>()
 				.ForMember(gufsd => gufsd.Roles, x => x.MapFrom(u => u.Roles));
 			this.CreateMap<UserRoleMapping, GetRolesForSessionDTO>()

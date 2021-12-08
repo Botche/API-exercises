@@ -18,5 +18,7 @@
 		string GeneratePasswordSalt();
 
 		string HashPassword(string password, string passwordSalt);
+
+		Task<bool> IsThereAnyDataInTableAsync();
 	}
 }

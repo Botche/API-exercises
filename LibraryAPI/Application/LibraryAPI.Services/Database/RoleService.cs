@@ -36,5 +36,24 @@
 			T roleToReturn = this.Mapper.Map<T>(role);
 			return roleToReturn;
 		}
+
+		public async Task<T> AddAsync<T>(string roleName)
+		{
+			Role role = new Role()
+			{
+				Name = roleName,
+			};
+
+			await this.DbSet.AddAsync(role);
+			await this.DbContext.SaveChangesAsync();
+
+			T roleToReturn = this.Mapper.Map<T>(role);
+			return roleToReturn;
+		}
+
+		public async Task<bool> IsThereAnyDataInTableAsync()
+		{
+			return await this.DbSet.AnyAsync();
+		}
 	}
 }

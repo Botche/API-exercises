@@ -8,5 +8,7 @@
 	public interface IUserRoleMappingService
 	{
 		Task<UserRoleMapping> AddRoleToUserAsync(Guid roleId, Guid userId);
+
+		Task<bool> IsThereAnyDataInTableAsync();
 	}
 }

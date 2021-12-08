@@ -9,6 +9,8 @@
 	using LibraryAPI.Database.Models.Users;
 	using LibraryAPI.Services.Database.Interfaces;
 
+	using Microsoft.EntityFrameworkCore;
+
 	public class UserRoleMappingService : BaseService<UserRoleMapping>, IUserRoleMappingService
 	{
 		public UserRoleMappingService(LibraryAPIDbContext dbContext, IMapper mapper) 
@@ -28,6 +30,11 @@
 			await this.DbContext.SaveChangesAsync();
 
 			return userRoleMapping;
+		}
+
+		public async Task<bool> IsThereAnyDataInTableAsync()
+		{
+			return await this.DbSet.AnyAsync();
 		}
 	}
 }

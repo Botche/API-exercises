@@ -138,6 +138,11 @@
 			return hashed;
 		}
 
+		public async Task<bool> IsThereAnyDataInTableAsync()
+		{
+			return await this.DbSet.AnyAsync();
+		}
+
 		private string GenerateJwtToken(string userId)
 		{
 			// generate token that is valid for 2 days

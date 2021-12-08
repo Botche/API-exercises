@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\LibraryAPI.Common\LibraryAPI.Common.csproj" />
+    <ProjectReference Include="..\..\Database\LibraryAPI.Database.Seed\LibraryAPI.Database.Seed.csproj" />
     <ProjectReference Include="..\LibraryAPI.DTOs\LibraryAPI.DTOs.csproj" />
     <ProjectReference Include="..\LibraryAPI.Services\LibraryAPI.Services.csproj" />
   </ItemGroup>
