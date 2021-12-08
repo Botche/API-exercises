@@ -13,7 +13,8 @@
 		public BookProfile()
 		{
 			this.CreateMap<Book, GetBookDTO>()
-				.ForMember(gbbm => gbbm.AuthorName, b => b.MapFrom(book => book.Author));
+				.ForMember(gbbm => gbbm.AuthorName, b => b.MapFrom(book => book.Author))
+				.ForMember(gbbm => gbbm.Genres, g => g.MapFrom(genre => genre.Genres));
 			this.CreateMap<IEnumerable<Book>, GetAllBooksDTO>()
 				.ForMember(gabbm => gabbm.Books, b => b.MapFrom(books => books))
 				.ForMember(gabbm => gabbm.BooksCount, b => b.MapFrom(books => books.Count()));

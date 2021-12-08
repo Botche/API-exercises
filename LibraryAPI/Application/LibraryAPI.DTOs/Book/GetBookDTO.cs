@@ -2,6 +2,8 @@
 {
 	using System;
 
+	using LibraryAPI.DTOs.Genre;
+
 	public class GetBookDTO
 	{
 		public Guid Id { get; set; }
@@ -18,6 +20,6 @@
 
 		public DateTime? DeletedOn { get; set; }
 
-		public int GenresCount { get; set; }
+		public GetAllGenreDTO Genres { get; set; }
 	}
 }

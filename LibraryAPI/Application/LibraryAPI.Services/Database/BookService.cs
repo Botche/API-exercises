@@ -58,6 +58,7 @@
 		{
 			IQueryable<Book> bookQuery = this.DbSet
 				.Include(b => b.Genres)
+				.ThenInclude(bgm => bgm.Genre)
 				.AsQueryable();
 
 			if (withDeleted == false)

@@ -14,9 +14,15 @@
 		{
 			this.CreateMap<PostGenreDTO, Genre>();
 			this.CreateMap<Genre, GetGenreDTO>();
-			this.CreateMap<IEnumerable<Genre>, GetAllGenreDTO>()
+			this.CreateMap<ICollection<Genre>, GetAllGenreDTO>()
 				.ForMember(gagbm => gagbm.Genres, g => g.MapFrom(genres => genres))
-				.ForMember(gabbm => gabbm.GenresCount, g => g.MapFrom(genres => genres.Count()));
+				.ForMember(gabbm => gabbm.GenresCount, g => g.MapFrom(genres => genres.Count));
+			this.CreateMap<ICollection<BookGenreMapping>, GetAllGenreDTO>()
+				.ForMember(gagbm => gagbm.Genres, g => g.MapFrom(genres => genres))
+				.ForMember(gabbm => gabbm.GenresCount, g => g.MapFrom(genres => genres.Count));
+			this.CreateMap<BookGenreMapping, GetGenreDTO>()
+				.ForMember(ggd => ggd.Id, bgm => bgm.MapFrom(mapping => mapping.GenreId))
+				.ForMember(ggd => ggd.Name, bgm => bgm.MapFrom(mappin => mappin.Genre.Name));
 			this.CreateMap<PutGenreDTO, Genre>();
 		}
 	}
