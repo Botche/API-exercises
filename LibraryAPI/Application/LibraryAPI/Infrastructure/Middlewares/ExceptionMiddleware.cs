@@ -48,7 +48,7 @@
 						.Select(e => e.ErrorMessage);
 
 					break;
-				case EntityDoesNotExist:
+				case EntityDoesNotExistException:
 					context.Response.StatusCode = (int)HttpStatusCode.NotFound;
 					break;
 			}

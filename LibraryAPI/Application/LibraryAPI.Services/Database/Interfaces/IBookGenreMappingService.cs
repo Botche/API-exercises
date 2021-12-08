@@ -11,8 +11,10 @@
 
 		Task<T> GetByIdAsync<T>(Guid id);
 
+		Task<T> GetByBookAndGenreIdAsync<T>(Guid bookId, Guid genreId);
+
 		Task<T> AddAsync<T>(BookGenreMapping model);
 
-		Task<bool> DeleteAsync(Guid id);
+		Task<bool> DeleteAsync(Guid bookId, Guid genreId);
 	}
 }

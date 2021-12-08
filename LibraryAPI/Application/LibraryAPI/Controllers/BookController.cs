@@ -19,12 +19,14 @@
 	[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
 	public class BookController : BaseAPIController
 	{
-		public BookController(IBookService bookService)
-		{
-			this.BookService = bookService;
-		}
+		private readonly IBookService bookService;
+		private readonly IBookGenreMappingService bookGenreMappingService;
 
-		public IBookService BookService { get; }
+		public BookController(IBookService bookService, IBookGenreMappingService bookGenreMappingService)
+		{
+			this.bookService = bookService;
+			this.bookGenreMappingService = bookGenreMappingService;
+		}
 
 		/// <summary>
 		/// Get book by Id
@@ -40,7 +42,7 @@
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> Get(Guid id, bool withDeleted = false)
 		{
-			GetBookDTO book = await this.BookService.GetByIdAsync<GetBookDTO>(id, withDeleted);
+			GetBookDTO book = await this.bookService.GetByIdAsync<GetBookDTO>(id, withDeleted);
 
 			if (book == null)
 			{
@@ -58,7 +60,7 @@
 		[HttpGet]
 		public async Task<IActionResult> Get(bool withDeleted = false)
 		{
-			GetAllBooksDTO books = await this.BookService.GetAllAsync<GetAllBooksDTO>(withDeleted);
+			GetAllBooksDTO books = await this.bookService.GetAllAsync<GetAllBooksDTO>(withDeleted);
 
 			return this.Ok(books);
 		}
@@ -83,7 +85,7 @@
 		[HttpPost]
 		public async Task<IActionResult> Post(PostBookDTO model)
 		{
-			Book createdBook = await this.BookService.AddAsync<Book>(model);
+			Book createdBook = await this.bookService.AddAsync<Book>(model);
 
 			return this.CreatedAtRoute(this.RouteData, createdBook);
 		}
@@ -111,7 +113,7 @@
 		[Route("{id}")]
 		public async Task<IActionResult> Put(Guid id, PutBookDTO model, bool withDeleted = false)
 		{
-			bool resultFromUpdate = await this.BookService.UpdateAsync(id, model, withDeleted);
+			bool resultFromUpdate = await this.bookService.UpdateAsync(id, model, withDeleted);
 
 			if (resultFromUpdate == false)
 			{
@@ -147,7 +149,7 @@
 		[Route("{id}")]
 		public async Task<IActionResult> Patch(Guid id, PatchBookDTO model, bool withDeleted = false)
 		{
-			bool resultFromPartialUpdate = await this.BookService.PartialUpdateAsync(id, model, withDeleted);
+			bool resultFromPartialUpdate = await this.bookService.PartialUpdateAsync(id, model, withDeleted);
 
 			if (this.ModelState.IsValid == false)
 			{
@@ -174,7 +176,28 @@
 		[Route("{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
-			bool resultFromDelete = await this.BookService.DeleteAsync(id);
+			bool resultFromDelete = await this.bookService.DeleteAsync(id);
+
+			if (resultFromDelete == false)
+			{
+				return this.BadRequest(ExceptionMessages.SOMETHING_WENT_WRONG_MESSAGE);
+			}
+
+			return this.Ok(resultFromDelete);
+		}
+
+		/// <summary>
+		/// Delete genre from book
+		/// </summary>
+		/// <param name="bookId">The book id</param>
+		/// <param name="genreId">The genre id</param>
+		/// <returns>The result from the delete action</returns>
+		/// <response code="200">If the relation is deleted successfully</response>
+		/// <response code="400">If there is no relation</response>
+		[HttpDelete]
+		public async Task<IActionResult> Delete(Guid bookId, Guid genreId)
+		{
+			bool resultFromDelete = await this.bookGenreMappingService.DeleteAsync(bookId, genreId);
 
 			if (resultFromDelete == false)
 			{

@@ -30,7 +30,7 @@
 
 			if (role == null)
 			{
-				throw new EntityDoesNotExist(ExceptionMessages.ROLE_DOES_NOT_EXIST_MESSAGE);
+				throw new EntityDoesNotExistException(ExceptionMessages.ROLE_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			T roleToReturn = this.Mapper.Map<T>(role);

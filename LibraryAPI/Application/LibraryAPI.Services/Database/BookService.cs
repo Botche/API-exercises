@@ -40,6 +40,7 @@
 				.OrderBy(b => b.Name)
 				.ThenBy(b => b.Author)
 			  .Include(b => b.Genres)
+				.ThenInclude(b => b.Genre)
 				.AsQueryable();
 
 			if (withDeleted == false)
@@ -69,7 +70,7 @@
 			Book book = await bookQuery.SingleOrDefaultAsync(b => b.Id == id);
 			if (book == null)
 			{
-				throw new EntityDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
+				throw new EntityDoesNotExistException(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			T mappedBook = this.Mapper.Map<T>(book);
@@ -93,7 +94,7 @@
 
 			if (bookToUpdate == null)
 			{
-				throw new EntityDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
+				throw new EntityDoesNotExistException(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			Book updatedBook = this.Mapper.Map(book, bookToUpdate);
@@ -111,7 +112,7 @@
 
 			if (bookToUpdate == null)
 			{
-				throw new EntityDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
+				throw new EntityDoesNotExistException(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			Type modelType = model.GetType();
@@ -170,7 +171,7 @@
 
 			if (bookToDelete == null)
 			{
-				throw new EntityDoesNotExist(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
+				throw new EntityDoesNotExistException(ExceptionMessages.BOOK_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			bookToDelete.IsDeleted = true;

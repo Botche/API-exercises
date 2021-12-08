@@ -52,7 +52,7 @@
 			Genre genre = await genreQuery.SingleOrDefaultAsync(g => g.Id == id);
 			if (genre == null)
 			{
-				throw new EntityDoesNotExist(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
+				throw new EntityDoesNotExistException(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
 			}
 
 			T result = this.Mapper.Map<T>(genre);
@@ -76,7 +76,7 @@
 
 			if (genreToUpdate == null)
 			{
-				throw new EntityDoesNotExist(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
+				throw new EntityDoesNotExistException(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
 			}
 
 			Genre updatedGenre = this.Mapper.Map(model, genreToUpdate);
@@ -94,7 +94,7 @@
 
 			if (genreToDelete == null)
 			{
-				throw new EntityDoesNotExist(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
+				throw new EntityDoesNotExistException(string.Format(ExceptionMessages.GENRE_DOES_NOT_EXIST_MESSAGE, id));
 			}
 
 			genreToDelete.IsDeleted = true;

@@ -8,9 +8,13 @@
 
 	using AutoMapper;
 
+	using LibraryAPI.Common.Constants;
+	using LibraryAPI.Common.Exceptions;
 	using LibraryAPI.Database;
 	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.Services.Database.Interfaces;
+
+	using Microsoft.EntityFrameworkCore;
 
 	public class BookGenreMappingService : BaseService<BookGenreMapping>, IBookGenreMappingService
 	{
@@ -30,6 +34,24 @@
 			throw new NotImplementedException();
 		}
 
+		public async Task<T> GetByBookAndGenreIdAsync<T>(Guid bookId, Guid genreId)
+		{
+			var bookGenreRelation = await this.DbSet
+				.Where(bgm => bgm.BookId == bookId
+					&& bgm.GenreId == genreId)
+				.Include(bgm => bgm.Book)
+				.Include(bgm => bgm.Genre)
+				.SingleOrDefaultAsync();
+
+			if (bookGenreRelation == null)
+			{
+				throw new EntityDoesNotExistException(ExceptionMessages.GENRE_BOOK_MAPPING_DOES_NOT_EXIST_MESSAGE);
+			}
+
+			var bookGenreRelationToReturn = this.Mapper.Map<T>(bookGenreRelation);
+			return bookGenreRelationToReturn;
+		}
+
 		public async Task<T> AddAsync<T>(BookGenreMapping model)
 		{
 			BookGenreMapping genreToAdd = this.Mapper.Map<BookGenreMapping>(model);
@@ -41,9 +63,14 @@
 			return result;
 		}
 
-		public Task<bool> DeleteAsync(Guid id)
+		public async Task<bool> DeleteAsync(Guid bookId, Guid genreId)
 		{
-			throw new NotImplementedException();
+			var bookGenreRelationToDelete = await this.GetByBookAndGenreIdAsync<BookGenreMapping>(bookId, genreId);
+
+			this.DbSet.Remove(bookGenreRelationToDelete);
+			await this.DbContext.SaveChangesAsync();
+
+			return true;
 		}
 	}
 }
