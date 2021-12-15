@@ -28,17 +28,20 @@
 		private readonly ApplicationSettings options;
 		private readonly IUserRoleMappingService userRoleMappingService;
 		private readonly IRoleService roleService;
+		private readonly IBookUserMappingService bookUserMappingService;
 
 		public UserService(LibraryAPIDbContext dbContext, 
 			IMapper mapper, 
 			IOptions<ApplicationSettings> options,
 			IUserRoleMappingService userRoleMappingService,
-			IRoleService roleService) 
+			IRoleService roleService,
+			IBookUserMappingService bookUserMappingService) 
 			: base(dbContext, mapper)
 		{
 			this.options = options.Value;
 			this.userRoleMappingService = userRoleMappingService;
 			this.roleService = roleService;
+			this.bookUserMappingService = bookUserMappingService;
 		}
 
 		public async Task<T> GetUserByEmailAsync<T>(string email)
@@ -47,7 +50,7 @@
 
 			if (user == null)
 			{
-				throw new ArgumentException();
+				throw new ArgumentException(ExceptionMessages.USER_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			T userToReturn = this.Mapper.Map<T>(user);
@@ -63,7 +66,7 @@
 
 			if (user == null)
 			{
-				throw new ArgumentException();
+				throw new ArgumentException(ExceptionMessages.USER_DOES_NOT_EXIST_MESSAGE);
 			}
 
 			T userToReturn = this.Mapper.Map<T>(user);
@@ -77,7 +80,7 @@
 			string enteredHashedPassword = this.HashPassword(model.Password, user.Salt);
 			if (user.PasswordHash != enteredHashedPassword)
 			{
-				throw new ArgumentException();
+				throw new ArgumentException(ExceptionMessages.PASSWORDS_MUST_MATCH_MESSAGE);
 			}
 
 			string token = this.GenerateJwtToken(user.Id.ToString());
@@ -91,7 +94,7 @@
 
 			if (user != null)
 			{
-				throw new ArgumentException();
+				throw new ArgumentException(ExceptionMessages.USER_EXIST_MESSAGE);
 			}
 
 			User userToBeCreated = this.Mapper.Map<User>(model);

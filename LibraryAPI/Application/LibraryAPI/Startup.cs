@@ -99,6 +99,7 @@ namespace LibraryAPI
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<IRoleService, RoleService>();
 			services.AddScoped<IUserRoleMappingService, UserRoleMappingService>();
+			services.AddScoped<IBookUserMappingService, BookUserMappingService>();
 		}
 	}
 }

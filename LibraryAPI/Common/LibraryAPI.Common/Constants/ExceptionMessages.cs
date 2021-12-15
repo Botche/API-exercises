@@ -16,6 +16,14 @@
 
 		public const string ROLE_DOES_NOT_EXIST_MESSAGE = "Role with such a name does not exist!";
 
+		public const string BOOK_USER_MAPPING_DOES_NOT_EXIST_MESSAGE = "There is no relation between this book and user!";
+
+		public const string USER_DOES_NOT_EXIST_MESSAGE = "User with such an id does not exist!";
+
+		public const string USER_EXIST_MESSAGE = "User with such an email already exists!";
+
+		public const string PASSWORDS_MUST_MATCH_MESSAGE = "Passwords must match!";
+
 		public const string USER_UNAUTHORIZED_MESSAGE = "User is unathorized for this kind of action!";
 
 		public const string USER_UNAUTHENTICATED_MESSAGE = "Log in before continue!";
