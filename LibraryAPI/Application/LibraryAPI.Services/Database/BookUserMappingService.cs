@@ -39,6 +39,8 @@
 
 		public async Task<T> CreateRelationAsync<T>(Guid bookId, Guid userId, DateTime deadLine)
 		{
+			this.ValidateDateTime(deadLine);
+
 			BookUserMapping model = new BookUserMapping()
 			{
 				BookId = bookId,
@@ -55,6 +57,8 @@
 
 		public async Task<T> UpdateRelationAsync<T>(Guid bookId, Guid userId, DateTime deadLine)
 		{
+			this.ValidateDateTime(deadLine);
+
 			BookUserMapping model = await this.GetModelByBookIdAndUserIdAsync<BookUserMapping>(bookId, userId);
 
 			model.DeadLine = deadLine;
@@ -90,6 +94,15 @@
 
 			T modelToReturn = this.Mapper.Map<T>(model);
 			return modelToReturn;
+		}
+
+		private void ValidateDateTime(DateTime deadLine)
+		{
+			if (DateTime.Compare(DateTime.UtcNow, deadLine) > 0)
+			{
+				// TODO: constant
+				throw new ArgumentException("Dead line cannot be before today");
+			}
 		}
 	}
 }

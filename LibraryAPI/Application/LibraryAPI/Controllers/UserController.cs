@@ -3,6 +3,8 @@
 	using System;
 	using System.Threading.Tasks;
 
+	using LibraryAPI.Database.Models.Books;
+	using LibraryAPI.DTOs.Book;
 	using LibraryAPI.DTOs.User;
 	using LibraryAPI.Services.Database.Interfaces;
 
@@ -11,10 +13,28 @@
 	public class UserController : BaseAPIController
 	{
 		private readonly IUserService userService;
+		private readonly IBookService bookService;
+		private readonly IBookUserMappingService bookUserMappingService;
 
-		public UserController(IUserService userService)
+		public UserController(
+			IUserService userService,
+			IBookService bookService,
+			IBookUserMappingService bookUserMappingService)
 		{
 			this.userService = userService;
+			this.bookService = bookService;
+			this.bookUserMappingService = bookUserMappingService;
+		}
+
+		[HttpPost]
+		[Route("get-book")]
+		public async Task<IActionResult> Post(string userEmail, Guid bookId, DateTime deadLine)
+		{
+			var user = await this.userService.GetUserByEmailAsync<GetUserIdDTO>(userEmail);
+			var book = await this.bookService.GetByIdAsync<GetBookDTO>(bookId);
+			await this.bookUserMappingService.CreateRelationAsync<BookUserMapping>(user.Id, book.Id, deadLine);
+
+			return this.Ok();
 		}
 
 		[HttpPost]

@@ -13,6 +13,7 @@
 	using LibraryAPI.Common;
 	using LibraryAPI.Common.Constants;
 	using LibraryAPI.Database;
+	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.Database.Models.Users;
 	using LibraryAPI.DTOs.Role;
 	using LibraryAPI.DTOs.User;
@@ -28,20 +29,17 @@
 		private readonly ApplicationSettings options;
 		private readonly IUserRoleMappingService userRoleMappingService;
 		private readonly IRoleService roleService;
-		private readonly IBookUserMappingService bookUserMappingService;
 
 		public UserService(LibraryAPIDbContext dbContext, 
 			IMapper mapper, 
 			IOptions<ApplicationSettings> options,
 			IUserRoleMappingService userRoleMappingService,
-			IRoleService roleService,
-			IBookUserMappingService bookUserMappingService) 
+			IRoleService roleService) 
 			: base(dbContext, mapper)
 		{
 			this.options = options.Value;
 			this.userRoleMappingService = userRoleMappingService;
 			this.roleService = roleService;
-			this.bookUserMappingService = bookUserMappingService;
 		}
 
 		public async Task<T> GetUserByEmailAsync<T>(string email)
