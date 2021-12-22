@@ -2,12 +2,12 @@
 {
 	using System;
 
-	public class PatchBookUserDTO
+	public class PatchReturnBookUserDTO
 	{
 		public string UserEmail { get; set; }
 
 		public Guid BookId { get; set; }
 
-		public DateTime DeadLine { get; set; }
+		public DateTime ReturnDate { get; set; }
 	}
 }

@@ -55,11 +55,16 @@
 			return modelToReturn;
 		}
 
-		public async Task<T> UpdateRelationAsync<T>(Guid bookId, Guid userId, DateTime deadLine)
+		public async Task<T> UpdateDeadLineAsync<T>(Guid bookId, Guid userId, DateTime deadLine)
 		{
 			this.ValidateDateTime(deadLine);
 
 			BookUserMapping model = await this.GetModelByBookIdAndUserIdAsync<BookUserMapping>(bookId, userId);
+
+			if (model.IsReturned)
+			{
+				throw new ArgumentException(ExceptionMessages.BOOK_ALREADY_RETURNED_MESSAGE);
+			}
 
 			model.DeadLine = deadLine;
 			model.UpdatedOn = DateTime.UtcNow;
@@ -75,7 +80,7 @@
 		{
 			BookUserMapping model = await this.GetModelByBookIdAndUserIdAsync<BookUserMapping>(bookId, userId);
 
-			if (model.IsReturned == true)
+			if (model.IsReturned)
 			{
 				throw new ArgumentException(ExceptionMessages.BOOK_ALREADY_RETURNED_MESSAGE);
 			}

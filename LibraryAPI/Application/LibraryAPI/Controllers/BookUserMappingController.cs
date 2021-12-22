@@ -53,6 +53,17 @@
 		{
 			var user = await this.userService.GetUserByEmailAsync<GetUserIdDTO>(model.UserEmail);
 			var book = await this.bookService.GetByIdAsync<GetBookDTO>(model.BookId);
+			var bookUserMapping = await this.bookUserMappingService.UpdateDeadLineAsync<GetBookUserDTO>(book.Id, user.Id, model.DeadLine);
+
+			return this.Ok(bookUserMapping);
+		}
+
+		[HttpPatch]
+		[Route("return")]
+		public async Task<IActionResult> ReturnBook(PatchReturnBookUserDTO model)
+		{
+			var user = await this.userService.GetUserByEmailAsync<GetUserIdDTO>(model.UserEmail);
+			var book = await this.bookService.GetByIdAsync<GetBookDTO>(model.BookId);
 			var bookUserMapping = await this.bookUserMappingService.SetReturnDateAsync<GetBookUserDTO>(book.Id, user.Id, model.ReturnDate);
 
 			return this.Ok(bookUserMapping);

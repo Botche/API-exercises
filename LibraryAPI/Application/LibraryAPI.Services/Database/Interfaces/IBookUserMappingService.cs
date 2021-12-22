@@ -9,7 +9,7 @@
 
 		Task<T> CreateRelationAsync<T>(Guid bookId, Guid userId, DateTime deadLine);
 
-		Task<T> UpdateRelationAsync<T>(Guid bookId, Guid userId, DateTime deadLine);
+		Task<T> UpdateDeadLineAsync<T>(Guid bookId, Guid userId, DateTime deadLine);
 
 		Task<T> DeleteRelationAsync<T>(Guid bookId, Guid userId);
 

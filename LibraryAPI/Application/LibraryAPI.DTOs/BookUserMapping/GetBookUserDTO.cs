@@ -23,5 +23,7 @@
 		public bool IsReturned { get; set; }
 
 		public DateTime DeadLine { get; set; }
+
+		public double PriceToPayForReturningAfterDeadLine { get; set; }
 	}
 }
