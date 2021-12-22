@@ -75,6 +75,17 @@
 		{
 			BookUserMapping model = await this.GetModelByBookIdAndUserIdAsync<BookUserMapping>(bookId, userId);
 
+			if (model.IsReturned == true)
+			{
+				throw new ArgumentException(ExceptionMessages.BOOK_ALREADY_RETURNED_MESSAGE);
+			}
+
+			if (DateTime.Compare(model.CreatedOn, returnDate) > 0)
+			{
+				throw new ArgumentException(ExceptionMessages.BOOK_INVALID_RETURN_DATE_MESSAGE);
+			}
+
+			model.IsReturned = true;
 			model.ReturnDate = returnDate;
 			model.UpdatedOn = DateTime.UtcNow;
 
@@ -100,8 +111,7 @@
 		{
 			if (DateTime.Compare(DateTime.UtcNow, deadLine) > 0)
 			{
-				// TODO: constant
-				throw new ArgumentException("Dead line cannot be before today");
+				throw new ArgumentException(ExceptionMessages.BOOK_INVALID_DEADLINE_MESSAGE);
 			}
 		}
 	}

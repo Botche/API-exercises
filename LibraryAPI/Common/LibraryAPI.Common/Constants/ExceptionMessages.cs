@@ -27,5 +27,11 @@
 		public const string USER_UNAUTHORIZED_MESSAGE = "User is unathorized for this kind of action!";
 
 		public const string USER_UNAUTHENTICATED_MESSAGE = "Log in before continue!";
+
+		public const string BOOK_ALREADY_RETURNED_MESSAGE = "The book is already returned!";
+
+		public const string BOOK_INVALID_RETURN_DATE_MESSAGE = "The return date cannot be before created on!";
+
+		public const string BOOK_INVALID_DEADLINE_MESSAGE = "Dead line cannot be before today";
 	}
 }
