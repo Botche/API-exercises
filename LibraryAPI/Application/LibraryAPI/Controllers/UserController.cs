@@ -22,7 +22,8 @@
 		{
 			string token = await this.userService.LoginAsync(model);
 
-			return this.Ok(token);
+			GetTokenDTO tokenObject = new GetTokenDTO(token);
+			return this.Ok(tokenObject);
 		}
 
 		[HttpPost]
