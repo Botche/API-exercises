@@ -20,7 +20,7 @@
 
 			if (user == null)
 			{
-				throw new ArgumentException(ExceptionMessages.USER_UNAUTHENTICATED_MESSAGE);
+				throw new UnauthorizedAccessCustomException(ExceptionMessages.USER_UNAUTHENTICATED_MESSAGE);
 			}
 
 			bool isInRole = true;

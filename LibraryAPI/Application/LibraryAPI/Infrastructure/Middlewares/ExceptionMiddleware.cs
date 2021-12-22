@@ -51,6 +51,9 @@
 				case EntityDoesNotExistException:
 					context.Response.StatusCode = (int)HttpStatusCode.NotFound;
 					break;
+				case UnauthorizedAccessCustomException:
+					context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+					break;
 			}
 
 			errorDetails.StatusCode = context.Response.StatusCode;

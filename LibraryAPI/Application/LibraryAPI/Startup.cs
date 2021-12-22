@@ -9,6 +9,7 @@ namespace LibraryAPI
 	using LibraryAPI.Database;
 	using LibraryAPI.Database.Seed;
 	using LibraryAPI.Infrastructure.Extensions;
+	using LibraryAPI.Infrastructure.Filters;
 	using LibraryAPI.Infrastructure.Middlewares;
 	using LibraryAPI.Services.Database;
 	using LibraryAPI.Services.Database.Interfaces;
@@ -51,23 +52,8 @@ namespace LibraryAPI
 					Scheme = "Bearer"
 				});
 
-				c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-				{
-					{
-						new OpenApiSecurityScheme
-						{
-							Reference = new OpenApiReference
-							{
-								Type = ReferenceType.SecurityScheme,
-								Id = "Bearer"
-							},
-							Scheme = "oauth2",
-							Name = "Bearer",
-							In = ParameterLocation.Header,
-						},
-						new List<string>()
-					}
-				});
+				c.OperationFilter<AuthResponsesOperationFilter>();
+				// c.DocumentFilter<CustomDocumentFilter>();
 
 				// Set the comments path for the Swagger JSON and UI.
 				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

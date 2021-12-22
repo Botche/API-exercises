@@ -33,5 +33,7 @@
 		public const string BOOK_INVALID_RETURN_DATE_MESSAGE = "The return date cannot be before created on!";
 
 		public const string BOOK_INVALID_DEADLINE_MESSAGE = "Dead line cannot be before today";
+
+		public const string ANONYMOUS_PAGE = "Logged users don't have access to this page";
 	}
 }

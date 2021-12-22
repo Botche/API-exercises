@@ -3,15 +3,18 @@
 	using System;
 	using System.Threading.Tasks;
 
+	using LibraryAPI.Common.Constants;
 	using LibraryAPI.Database.Models.Books;
 	using LibraryAPI.DTOs.Book;
 	using LibraryAPI.DTOs.BookUserMapping;
 	using LibraryAPI.DTOs.User;
+	using LibraryAPI.Infrastructure.Filters;
 	using LibraryAPI.Services.Database.Interfaces;
 
 	using Microsoft.AspNetCore.Mvc;
 
 	[Route("api/get-book")]
+	[JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
 	public class BookUserMappingController : BaseAPIController
 	{
 		private readonly IUserService userService;
@@ -29,6 +32,7 @@
 		}
 
 		[HttpGet]
+		[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
 		public async Task<IActionResult> Get(string userEmail, Guid bookId)
 		{
 			var user = await this.userService.GetUserByEmailAsync<GetUserIdDTO>(userEmail);
@@ -59,6 +63,7 @@
 		}
 
 		[HttpPatch]
+		[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
 		[Route("return")]
 		public async Task<IActionResult> ReturnBook(PatchReturnBookUserDTO model)
 		{

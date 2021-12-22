@@ -16,7 +16,7 @@
 	using LibraryAPI.Common.Constants;
 	using LibraryAPI.Infrastructure.Filters;
 
-	[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
+	[JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
 	public class BookController : BaseAPIController
 	{
 		private readonly IBookService bookService;
@@ -40,6 +40,7 @@
 		[Route("{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
 		public async Task<IActionResult> Get(Guid id, bool withDeleted = false)
 		{
 			GetBookDTO book = await this.bookService.GetByIdAsync<GetBookDTO>(id, withDeleted);
@@ -58,6 +59,7 @@
 		/// <returns>Returns all books sorted by name</returns>
 		/// <response code="200">Returns all books sorted by name</response>
 		[HttpGet]
+		[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
 		public async Task<IActionResult> Get(bool withDeleted = false)
 		{
 			GetAllBooksDTO books = await this.bookService.GetAllAsync<GetAllBooksDTO>(withDeleted);

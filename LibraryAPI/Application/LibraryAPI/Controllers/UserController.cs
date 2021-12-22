@@ -3,6 +3,7 @@
 	using System.Threading.Tasks;
 
 	using LibraryAPI.DTOs.User;
+	using LibraryAPI.Infrastructure.Filters;
 	using LibraryAPI.Services.Database.Interfaces;
 
 	using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@
 		}
 
 		[HttpPost]
+		[AllowAnonymousOnly]
 		[Route("login")]
 		public async Task<IActionResult> Login(PostUserLoginDTO model)
 		{
@@ -27,6 +29,7 @@
 		}
 
 		[HttpPost]
+		[AllowAnonymousOnly]
 		[Route("register")]
 		public async Task<IActionResult> Register(PostUserRegisterDTO model)
 		{

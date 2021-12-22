@@ -10,7 +10,7 @@
 	using LibraryAPI.Common.Constants;
 	using LibraryAPI.Infrastructure.Filters;
 
-	[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
+	[JwtAuthorize(Roles = new[] { GlobalConstants.ADMIN_ROLE_NAME })]
 	public class GenreController : BaseAPIController
 	{
 		public GenreController(IGenreService genreService)
@@ -21,6 +21,7 @@
 		public IGenreService GenreService { get; }
 
 		[HttpGet]
+		[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
 		public async Task<IActionResult> Get(bool withDeleted = false)
 		{
 			GetAllGenreDTO genres = await this.GenreService.GetAllAsync<GetAllGenreDTO>(withDeleted);
@@ -30,6 +31,7 @@
 
 		[HttpGet]
 		[Route("{id}")]
+		[JwtAuthorize(Roles = new[] { GlobalConstants.USER_ROLE_NAME, GlobalConstants.ADMIN_ROLE_NAME })]
 		public async Task<IActionResult> Get(Guid id, bool withDeleted = false)
 		{
 			GetGenreDTO genre = await this.GenreService.GetByIdAsync<GetGenreDTO>(id, withDeleted);
